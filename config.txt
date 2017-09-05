@@ -1,0 +1,36 @@
+[file-paths]
+generaldiscourse = file/path/to/generaldiscourse.txt
+fhisdiscourse = file/path/to/fhisdiscourse.txt
+fhrsdiscourse = file/path/to/fhrsDisourse.txt
+
+[search-terms]
+genfoodhygiene = general food hygiene discourse
+fhisdiscourseboth = fhis discourse
+fhrsdiscourseboth = fhrs discourse
+
+[search-definitions]
+general = 0
+fhis = 1
+fhrs = 0
+textFiles = 0
+
+[result-paths]
+genboth = folder/path/to/statistics/generalDiscourse
+fhisboth = folder/path/to/statistics/fhis
+fhrsboth = folder/path/to/statistics/fhrs
+tweetsscotland = folder/path/to/tweetFolder/scotland
+tweetsengland = folder/path/to/tweetFolder/england
+alltweets = folder/path/to/tweetFolder/all
+rawTweets = folder/path/to/raw-tweets
+textFiles =folder/path/to/texts
+
+[search-location]
+england = 0
+scotland = 0
+both = 1
+
+[db-data]
+db = dbName
+port = 
+server = 
+
