@@ -4,14 +4,12 @@ import os
 import config
 from configparser import SafeConfigParser
 
-parser = SafeConfigParser()
-parser.read('config.txt')
 #function to split text files into smaller text files for topic analysis
 def splitFile(texts):
     textFile = []
     count = 0
     i = 0
-
+    path = config.tweetFolders()
     for line in texts:
         lineS = ' '.join(line)
         textFile.append(lineS)
@@ -20,7 +18,7 @@ def splitFile(texts):
 
         if count >=300:
             count = 0
-            file = open("./amazon/%s_texts.txt" %(i), "w")
+            file = open("./%s/%s_texts.txt" %(path,i), "w")
             file.write("<d_%s>\n" %i)
             for text in textFile:
                 if text != "":
@@ -30,7 +28,9 @@ def splitFile(texts):
             i += 1
     print (str(i) + " files have been created.")
 
-#creating files of processed tweets ordered by date, using as threshold for the file size the original word count of the tweets
+#creating a file of processed tweets ordered by date, which is split into 'documents'.. 
+#..using as threshold for the document length the original word count of the tweets..
+#..each document must start with a line in format: <document_label> document_line_count
 def textsByDate(tweets, origCount, counter):
     print ("Begining to generate text files of tweets ordered by date. ")
     count = len(tweets)
@@ -71,7 +71,9 @@ def textsByDate(tweets, origCount, counter):
 
     print ("A text file with all processed tweets for word '"+counter+"' has been created.")
     
-
+#currently not in use as we don't have enough tweets from the same users in order to group them..
+#..by authors, keeping it in case, needs to be redone though as it's producing results..
+#..in the required format
 def textsByAgent(tweetsList, origCount):
     print ("Begining to generate text files of tweets grouped by agent and ordered by date. ")
     dicw ={}
@@ -101,7 +103,7 @@ def textsByAgent(tweetsList, origCount):
              #save the current list of texts in a file and rstart the count
              if wordCount >= 500 or tweetIndex == count - 1:
                  wordCount = 0
-                 file = open("./stuff/%s_%s_texts.txt" %(key,i), "w", encoding='utf-8')
+                 file = open("./need_to_define_a_path_if_used/%s_%s_texts.txt" %(key,i), "w", encoding='utf-8')
                  file.write("<d_%s_%s>\n" %(key,i))
                  for line in tweetText:
                      if len(line) == 0:
