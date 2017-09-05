@@ -5,30 +5,16 @@ import numpy as np
 
 def display_topics(H, W, feature_names, no_top_words, no_top_documents):
     for topic_idx, topic in enumerate(H):
-        #print ('Topic %d:' % (topic_idx))
+        print ('Topic %d:' % (topic_idx))
         print (' '.join([feature_names[i]
                         for i in topic.argsort()[:-no_top_words - 1:-1]]))
-        #print ("-- -- -- -- -- -- -- -- -- -- -- -- --")
-        """top_doc_indices = np.argsort( W[:,topic_idx] )[::-1][0:no_top_documents]
-        for doc_index in top_doc_indices:
-            print (documents[doc_index])
-            print ("- - - - - - - - - - - - - - - - -")
-        print ("----------------------------------")"""
+        print ("-- -- -- -- -- -- -- -- -- -- -- -- --")
 
 
 path = input("Please provide a directory: ")
 if len(path)==0:
-    """
-    table = input("Would you like to fetch tweets directly from database, type 'yes' or press enter to continue: ")
-    if table == "yes" :
-        import test_Sql_Login
-        tweetsList = test_Sql_Login.finalTweetTexts
-        total = []
-        for n in tweetsList:
-            total += n
-            doc_set.append(n[2])
-    else:"""
-    path = 'C:/Users/prv-s10mm2/Documents/pyMSSQL-master/stuff'
+
+    path = '/some/default/path'
 
 dataset = load_files(path, description=None, categories=None, load_content=True, shuffle=True, encoding=None, decode_error='strict', random_state=0)
 documents = dataset.data
@@ -54,4 +40,4 @@ no_top_documents = 1
 print ("-----------------------------------")
 display_topics(lda_H, lda_W, tf_feature_names, no_top_words, no_top_documents)
 l = dir(lda_model)
-#print (l)
+
