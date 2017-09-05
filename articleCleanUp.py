@@ -27,6 +27,7 @@ allTexts = []
 def articleCleanup(path):
     SKIP_FILES = {'cmds'}
     doc_set = []
+    folderName = os.path.basename(os.path.normpath(path))
 
     #reading the files in the folder
     for root, dir_names, file_names in os.walk(path):
@@ -50,7 +51,7 @@ def articleCleanup(path):
         cleanText = []
         textCleanUp.textCleanup(allWords, sentence, cleanText)
         lineText.append(cleanText)
-    textCleanUp.frequencyCount(nlp, allWords, repeatedWords, uniqueWords, allWordsFrequency,counter)
+    textCleanUp.frequencyCount(nlp, allWords, repeatedWords, uniqueWords, allWordsFrequency,folderName)
     i = 0
     allTextsS = []
     #adding each word that has been repeated in the list of all texts
@@ -62,4 +63,4 @@ def articleCleanup(path):
                 newLine.append(word)
         allTexts.append(newLine)
 
-    agent_sort.splitFile(allTexts)
+    agent_sort.splitFile(allTexts, folderName)

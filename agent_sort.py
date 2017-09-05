@@ -5,7 +5,7 @@ import config
 from configparser import SafeConfigParser
 
 #function to split text files into smaller text files for topic analysis
-def splitFile(texts):
+def splitFile(texts, folderName):
     textFile = []
     count = 0
     i = 0
@@ -19,7 +19,7 @@ def splitFile(texts):
         n+=1
         if count >=300:
             count = 0
-            file = open("%s/%s_texts.txt" %(path,i), "w")
+            file = open("%s/%s_%s_texts.txt" %(path,folderName,i), "w")
             file.write("<d_%s> %s\n" %(i,n))
             for text in textFile:
                 if text != "":
