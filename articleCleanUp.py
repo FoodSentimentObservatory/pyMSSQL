@@ -12,6 +12,7 @@ from operator import itemgetter
 from collections import Counter
 import textCleanUp
 import agent_sort
+import spacyStopWords
 
 
 wordCount = [("Id","Text", "Count")]
@@ -42,13 +43,14 @@ def articleCleanup(path):
                     f.close()
     #loops through each line of text and removes stop words,urls, punctuation, numbers and other non-alphabetical symbols
     lineText = []
+    counter = "text"
     for line in doc_set:
         lineS = str(line.lower())
         sentence = nlp(lineS)
         cleanText = []
         textCleanUp.textCleanup(allWords, sentence, cleanText)
         lineText.append(cleanText)
-    textCleanUp.frequencyCount(nlp, allWords, repeatedWords, uniqueWords, allWordsFrequency)
+    textCleanUp.frequencyCount(nlp, allWords, repeatedWords, uniqueWords, allWordsFrequency,counter)
     i = 0
     allTextsS = []
     #adding each word that has been repeated in the list of all texts

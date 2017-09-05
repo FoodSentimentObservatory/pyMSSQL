@@ -9,23 +9,25 @@ def splitFile(texts):
     textFile = []
     count = 0
     i = 0
-    path = config.tweetFolders()
+    n=0
+    path = config.resultPaths()
     for line in texts:
         lineS = ' '.join(line)
         textFile.append(lineS)
         lineCount = len(line)
         count = count + lineCount
-
+        n+=1
         if count >=300:
             count = 0
-            file = open("./%s/%s_texts.txt" %(path,i), "w")
-            file.write("<d_%s>\n" %i)
+            file = open("%s/%s_texts.txt" %(path,i), "w")
+            file.write("<d_%s> %s\n" %(i,n))
             for text in textFile:
                 if text != "":
                     file.write("%s\n" %text)
             file.close()
             textFile.clear()
             i += 1
+            n=0
     print (str(i) + " files have been created.")
 
 #creating a file of processed tweets ordered by date, which is split into 'documents'.. 
