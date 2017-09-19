@@ -1,7 +1,7 @@
 [file-paths]
-generaldiscourse = file/path/to/generaldiscourse.txt
-fhisdiscourse = file/path/to/fhisdiscourse.txt
-fhrsdiscourse = file/path/to/fhrsDisourse.txt
+generaldiscourse = file/path/to/data/generaldiscourse.txt
+fhisdiscourse = file/path/to/data/fhisdiscourse.txt
+fhrsdiscourse = file/path/to/data/fhrsDisourse.txt
 
 [search-terms]
 genfoodhygiene = general food hygiene discourse
