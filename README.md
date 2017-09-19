@@ -92,7 +92,7 @@ All files from **test.py**, **articleCleanUp** and **raw-tweets** are automatica
 
 * raw tweets, text files split in folders by keyword
 
-* #### Statistics for each keyword set for each location
+* ###### Statistics for each keyword set for each location
 
   * frequency counts of words for each keyword set, counts are done after filtering stop words, urls, numbers and words that only apeared once in the whole dataset
 
@@ -101,3 +101,5 @@ All files from **test.py**, **articleCleanUp** and **raw-tweets** are automatica
   * a csv file containing a tweet's original text, word count, filter text and new word count
 
   * a csv file used for visualisation of tweet contents
+
+*  a csv count containing counts of how many tweets containing a given keyword are there after retweet removal, how many of them are from Scotland and how many are from England 
