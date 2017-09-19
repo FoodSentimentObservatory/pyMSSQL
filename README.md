@@ -36,7 +36,7 @@ Before running the code, go to config.txt and set the desired search-definition 
 ```
 If you want to process general food discourse data, in the search-definition tag set `general` to 1.
 
-The code will then automatically select the needed keyword file, **generalDiscourse.txt**, available the data folder.
+The code will then automatically select the needed keyword file, generalDiscourse.txt, available the data folder.
 
 It will also select the search term that will be needed to sift through the database and collect only tweets 
 from that discourse search. In this case from the tag `search-terms` it will select `genfoodhygiene`.
@@ -94,7 +94,7 @@ All files from **test.py**, **articleCleanUp** and **raw-tweets** are automatica
 
 * raw tweets, text files split in folders by keyword
 
-* ###### Statistics for each keyword set for each location
+* Statistics for each keyword set for each location
 
   * frequency counts of words for each keyword set, counts are done after filtering stop words, urls, numbers and words that only apeared once in the whole dataset
 
@@ -105,3 +105,9 @@ All files from **test.py**, **articleCleanUp** and **raw-tweets** are automatica
   * a csv file used for visualisation of tweet contents
 
 *  a csv count containing counts of how many tweets containing a given keyword are there after retweet removal, how many of them are from Scotland and how many are from England 
+
+* for each keyword set from a location, a text file is created, which is in a ready to use format for jst, only needs to be copied to the data folder of jst
+
+## After processing
+
+Take jst-ready text files which have names similar to `*keyword*_all_texts`, download the [jst](https://github.com/linron84/JST) tool, place text files in its data folder and follow the instructions for running it. 
