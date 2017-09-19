@@ -42,12 +42,12 @@ Similar functionality to test.py, however instead of processed texts, this scrip
 
 ## Result directories
 
-###Needs directories for: 
+### Needs directories for: 
 
-*tweet text files results(all search definitions go in the same one with the current config file, however could be useful to add sub-directories for each search definition and send each result to its appropriate search definition dir; this would require modification of the config.txt structure), 
+* tweet text files results(all search definitions go in the same one with the current config file, however could be useful to add sub-directories for each search definition and send each result to its appropriate search definition dir; this would require modification of the config.txt structure), 
 
-*statistics (within the statistics a separate folder for each search term), 
+* statistics (within the statistics a separate folder for each search term), 
 
-*raw-tweets (currently automatcally generating folders for the text files within the folder, however, could be useful to consider also splitting the results in search definition sub-directories as well; again would require modification of config.txt structure), 
+* raw-tweets (currently automatcally generating folders for the text files within the folder, however, could be useful to consider also splitting the results in search definition sub-directories as well; again would require modification of config.txt structure), 
 
-*texts directory for the text files from the articleCleanUp.py. 
+* texts directory for the text files from the articleCleanUp.py. 
