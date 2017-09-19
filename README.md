@@ -8,7 +8,7 @@ Code to pull data from database and process it in different approaches.
 
 ### Required installations
 
-* Python 3.6
+* [Python 3.6](https://www.python.org/downloads/)
 
 * [Spacy](https://spacy.io/docs/usage/)  - see installation description on their website
 
@@ -34,12 +34,12 @@ Sample keyword files for filtering and grouping in datasets are available in the
 Before running the code, go to config.txt and set the desired search-definition value to 1.
 
 ```
-If you want to process general food discourse data, set that search-definition to 1.
+If you want to process general food discourse data, in the search-definition tag set `general` to 1.
 
-The code will then automatically select the needed keyword file, **generalDiscourse.txt**.
+The code will then automatically select the needed keyword file, **generalDiscourse.txt**, available the data folder.
 
 It will also select the search term that will be needed to sift through the database and collect only tweets 
-from that discourse search.
+from that discourse search. In this case from the tag `search-terms` it will select `genfoodhygiene`.
 ```
 
 ## Running the code
@@ -48,23 +48,25 @@ The script can be ran either through main.py by selecting the desired funtionali
 
 ### test_sql_login.py 
 
-Can work with all tweets from the database or tweets from a specified keyword or multiple specified keywords. Filters texts, generates statistics and text files to be used by jst.
+Can work with all tweets from the database or tweets from a specified keyword or multiple specified keywords. When running the code a prompt will ask you to specify any keywords to search with, either hit enter or type them in a similar format `burger glasgow` and then press enter. The script pulls the desired tweets rom the databse, filters them, generates statistics and text files to be used by jst. 
+
+**Note:** If you search for keywords that are not in the original keyword list, the script will find them and create the above mentioned files, however, at this stage you can't get raw tweets to be used by the summarisation-scripts.
 
 ### test.py
 
-Combines tweets by keyword, filters the texts and generates statistics files for those datasets, files for visualisation and text files in the format used by jst.
+Combines tweets by keyword and then by location, filters the texts and generates statistics files for those datasets, files for visualisation and text files in the format used by jst. Those files are generated for both locations separately.
 
 **Note:** the script takes a list of keywords and goes through each of them automatically. Unlike in **test_sql_login.py**, here the user can't select a specific keyword. In **test_sql_login.py** the user can search for words that were not part of the original keyword lists.
 
 ### articleCleanUp.py 
 
-Used for filtering text files (e.g. articles from newspapers) and generating filtered text results ready for topic extraction.
+Used for filtering text files (e.g. articles from newspapers) and generating filtered text results ready for topic extraction. Takes as input the path to a folder containing text files (in txt format) that need to be processed.
 
 ### raw-tweets.py.
 
 Similar functionality to test.py, however instead of processed texts, this script generates files of raw tweets, matching the order of the texts produced by the test.py.
 
-To run the script, go to the directory of this package on your system in comman line and type the following:
+To run the script, go to the directory of this package on your system in command line and type the following:
 
 ```
 main.py 
