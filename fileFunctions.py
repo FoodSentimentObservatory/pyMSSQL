@@ -1,12 +1,7 @@
 import sys
 import csv
-from configparser import SafeConfigParser
 import config
 import re
-
-parser = SafeConfigParser()
-parser.read('config.txt')
-
 
 def readKeywordFile():
     pathk = config.keywordFileSelection()
