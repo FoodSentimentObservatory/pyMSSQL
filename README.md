@@ -17,9 +17,9 @@ Code to pull data from database and process it in different approaches.
 ```
 Go to http://www.lfd.uci.edu/~gohlke/pythonlibs/#pymssql and download the version of pymssql for your machine
 
-(e.g. for a 64 bit machine with Python 3.6 you'll need the **pymssql-2.1.3-cp36-cp36m-win_amd64.whl**)
+(e.g. for a 64 bit machine with Python 3.6 you'll need the pymssql-2.1.3-cp36-cp36m-win_amd64.whl)
 
-In command line type **pip install pymssql-2.1.3-cp36-cp36m-win_amd64.whl**
+In command line type pip install pymssql-2.1.3-cp36-cp36m-win_amd64.whl
 ```
 ### Other required setup
 
@@ -110,4 +110,4 @@ All files from **test.py**, **articleCleanUp** and **raw-tweets** are automatica
 
 ## After processing
 
-Take jst-ready text files which have names similar to `*keyword*_all_texts`, download the [jst](https://github.com/linron84/JST) tool, place text files in its data folder and follow the instructions for running it. 
+Take jst-ready text files which have names similar to `*keyword_location*_all_texts`, download the [jst](https://github.com/linron84/JST) tool, place text files in its data folder and follow the instructions for running it. 
