@@ -58,9 +58,7 @@ Combines tweets by keyword and then by location, filters the texts and generates
 
 **Note:** the script takes a list of keywords and goes through each of them automatically. Unlike in **test_sql_login.py**, here the user can't select a specific keyword. In **test_sql_login.py** the user can search for words that were not part of the original keyword lists.
 
-### articleCleanUp.py 
 
-Used for filtering text files (e.g. articles from newspapers) and generating filtered text results ready for topic extraction. Takes as input the path to a folder containing text files (in txt format) that need to be processed.
 
 ### raw-tweets.py.
 
@@ -73,6 +71,12 @@ main.py
 ```
 
 You can run any of the other above mentioned scripts in the same way.
+
+### articleCleanUp.py 
+
+Used for filtering text files (e.g. articles from newspapers) and generating filtered text results ready for topic extraction. Takes as input the path to a folder containing text files (in txt format) that need to be processed.
+
+**Note: ** this script can only be ran through main.py. When prompted to provide a path or hit enter, a path should be provided.
 
 ## Result directories
 
