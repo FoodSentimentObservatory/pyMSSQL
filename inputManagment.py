@@ -91,6 +91,8 @@ def groupSearch(cursor, location,searchQuery, group):
                 tweetID = tweet[0]
                 count=0       
                 alreadySeen=[]
+
+                date = tweet[3].rpartition('.')[0]
                 #for each word in the grop, checking if it exists in the text..
                 #if it does, one up the counter and search for the next word in the group
                 #if a word appears twice in tweet, we only count it once
@@ -105,7 +107,7 @@ def groupSearch(cursor, location,searchQuery, group):
                         verified="False"
                     elif tweet[8]==True:
                         verified="True"    
-                    filteredTextTweet=[text,tweet[3],tweet[5],verified,displayName] 
+                    filteredTextTweet=[text,date,tweet[5],verified,displayName] 
                     listOfTweetIDs.append(tweetID) 
                     groupRow.append(filteredTextTweet)
     print ("Found "+str(len(groupRow))+" tweets containing all words from the group")   
