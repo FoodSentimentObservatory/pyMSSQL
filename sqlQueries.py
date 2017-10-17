@@ -61,7 +61,8 @@ def locationQuery(cursor,searchDescription, location):
 def locationQueryKeyword(cursor, keyword,searchDescription, location):
      cursor.execute("SELECT [Sprint-1].[dbo].[Post].[Id],[Sprint-1].[dbo].[Post].[hasCreator],\
      [Sprint-1].[dbo].[Post].[body], [Sprint-1].[dbo].[Post].[createdAt], [Sprint-1].[dbo].[Post].[platformPostID],\
-     [Sprint-1].[dbo].[UserAccount].[platformAccountId],[Sprint-1].[dbo].[Search].[Note], [Sprint-1].[dbo].[Post].[SearchId] \
+     [Sprint-1].[dbo].[UserAccount].[platformAccountId],[Sprint-1].[dbo].[Search].[Note], [Sprint-1].[dbo].[Post].[SearchId],\
+     [Sprint-1].[dbo].[UserAccount].[verified],[Sprint-1].[dbo].[UserAccount].[displayName] \
      FROM [Sprint-1].[dbo].[Post]\
      INNER join [Sprint-1].[dbo].[Search] ON [Sprint-1].[dbo].[Post].[SearchId]=[Sprint-1].[dbo].[Search].Id\
      INNER join [Sprint-1].[dbo].[UserAccount] ON [Sprint-1].[dbo].[UserAccount].[Id]= [Sprint-1].[dbo].[Post].[hasCreator]\

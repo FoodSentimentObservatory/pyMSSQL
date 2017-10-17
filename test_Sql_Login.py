@@ -49,6 +49,8 @@ def connect():
         rowSc = inputManagment.fetchingTweets(cursor, locationSc, searchQuery)
         rowEn = inputManagment.fetchingTweets(cursor, locationEn, searchQuery)
 
+        
+
         tweetCount = len(rowSc)+len(rowEn)
 
         print ("Found "+str(tweetCount)+" tweets.")
@@ -81,7 +83,7 @@ def connect():
         print (e)
         return None
     
-    return
+    return"""
 
 #function for processing the tweets
 def rowFunction(sortedRowS, dateList, visList, location):

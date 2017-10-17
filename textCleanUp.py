@@ -6,15 +6,28 @@ import sys
 import os
 from operator import itemgetter
 import fileFunctions
+import spacyStopWords
+from itertools import groupby
+
+nlp = spacy.load("en")
+spacyStopWords.stopWordsList(nlp)
 #function to remove stop words, urls, punctuation, numbers and symbols using spacy. Goes through each tweet text and appends the result to two lists, one for the tweet and one for general statistics
-def textCleanup(allWords,text, someList):
+def textCleanup(allWords,text):
     for word in text:
                 words =re.sub(r'@', "", str(word))
                 if word.is_stop != True and word.like_url != True and word.is_punct !=True and word.like_num != True and words.isalpha()== True and len(words)> 1:
-                    someList.append(words)
+                    #someList.append(words)
                     allWords.append(words.lower())
 #does a frequency count of words across the whole corpus given to it using spacy and also generates a list of repeated words and unique words
-def frequencyCount(nlp, allWords, repeatedWords, uniqueWords, allWordsFrequency,counter):
+def frequencyCount(tweets, group):
+
+    allWords = []
+    repeatedWords=[]
+    uniqueWords=[]
+    for tweet in tweets:
+        text = tweet[0].lower()
+        sentence = nlp(text)
+        textCleanup(allWords, sentence)
     allWordsStr = ' '.join(allWords)
     doc = nlp(allWordsStr)
     counts = doc.count_by(ORTH)
@@ -26,23 +39,33 @@ def frequencyCount(nlp, allWords, repeatedWords, uniqueWords, allWordsFrequency,
         #if words.isalpha() == True:
         frequencyTuple = (str(count), words.lower())
         frequencyTupleStr = ' '.join(frequencyTuple)
-        allWordsFrequency.append(frequencyTupleStr)
+        #allWordsFrequency.append(frequencyTupleStr)
         if count > 1:
                     repeatedWordsTuple = (str(count), words.lower())
-                    repeatedWordsTupleStr = ' '.join(repeatedWordsTuple)
-                    repeatedWords.append(repeatedWordsTupleStr)
+                    #repeatedWordsTupleStr = ' '.join(repeatedWordsTuple)
+                    repeatedWords.append(repeatedWordsTuple)
 
         else:
                     uniqueWords.append(words.lower())
+    print("Generated frequencies for current group") 
+
+    n=0
+    topTen=[]
+    #removing the group keywords from that list because we clearly know they are frequent and select the top 10 remaining
+    for tup in repeatedWords:
+        if tup[1]not in group and n<15:
+            topTen.append(tup)
+            n+=1               
+    return topTen                
     #generate a txt file with all words that have been repeated at least twice
-    fileNameStringAllFreq = "allFrequencies"
-    fileFunctions.writeTxtFrequencyFile(allWordsFrequency,fileNameStringAllFreq, counter)
-    print ("File with the frequencies of all words has been generated. ")
+    #fileNameStringAllFreq = "allFrequencies"
+    #fileFunctions.writeTxtFrequencyFile(allWordsFrequency,fileNameStringAllFreq, counter)
+    #print ("File with the frequencies of all words has been generated. ")
 
-    fileNameStringRep = "repeatedWords"
-    fileFunctions.writeTxtFrequencyFile(repeatedWords,fileNameStringRep,counter)
+    #fileNameStringRep = "repeatedWords"
+    #fileFunctions.writeTxtFrequencyFile(repeatedWords,fileNameStringRep,counter)
 
-    print ("File with the frequencies of all repeated words has been generated. ")
+    #print ("File with the frequencies of all repeated words has been generated. ")
 
 #removes any word from a tweet which doesn't appear at least twice across the whole tweet corpus
 def removeUniqueWords(uniqueWords, allTweets, finalTweetTexts, finalTextCount):
@@ -142,3 +165,36 @@ def wordCountGen(wordCount, finalTextCount, counter):
                 wordCountFinal.append(finalCountTuple)
 
     fileFunctions.writeCsvFile(wordCountFinal, fileNameString)
+
+def clickableLinks(item):
+    r = re.compile(r"(https://[^ ]+)")
+    text= r.sub(r'<a href="\1">\1</a>', item)   
+
+    return text 
+
+def extraCharRemoval(item, charList,check):
+    for ch in charList:
+        if ch in item:
+            item=item.replace(ch,"")
+    if check==0:        
+        itemS=item[1:]   
+    elif check==1:
+        itemS=item[1:-1] 
+    else:
+        itemS=item          
+
+    return itemS
+
+def addTweetToNewGroupsList(word,tweet,groupIdStr,newGroups):
+    groupId=groupIdStr+word
+    tweetWithWord = [tweet[0], tweet[1], tweet[2], tweet[3], tweet[4],word,groupId]
+    newGroups.append(tweetWithWord)    
+
+def dictionaryGen(tweetGroups,i):
+    dicw={}
+    f = lambda x: x[i]
+    #putting the tweets in dictionary, split by keywordGroupId
+    for key, group in groupby(sorted(tweetGroups, key=f), f):
+        dicw[key] = list(group) 
+
+    return dicw    

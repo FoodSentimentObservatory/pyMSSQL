@@ -4,7 +4,7 @@ import spacy
 def stopWordsList(nlp):
     newStopWords = ['co', 'couldnt', 'describe', 'eg', 'find', 'found', 'hasnt', 'im', 'ie', 'ltd', 'mill', 'un', 'de', 'rt', 'pm', \
                     'hi', 'hello', 'hey', 'pre', 'retweet', 'http', 'htt', 'ht', 'mr', 'ms', 'mrs', 'maybe', 'app', 'ha', 'haha', 'till'\
-                    'til', 'cv', 'ya', 'vs', 'st', 'dm', 'https']
+                    'til', 'cv', 'ya', 'vs', 'st', 'dm', 'https','amp']
     for stopw in newStopWords:
         en.English.Defaults.stop_words.add(stopw)
     notStopWords = ['part', 'again', 'last', 'using', 'almost', 'together', 'cannot', 'well', 'rather', 'without', 'various',\

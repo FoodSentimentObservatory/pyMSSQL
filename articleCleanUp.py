@@ -25,7 +25,6 @@ spacyStopWords.stopWordsList(nlp)
 allTexts = []
 
 def articleCleanup(path):
-    SKIP_FILES = {'cmds'}
     doc_set = []
     folderName = os.path.basename(os.path.normpath(path))
 

@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<link  rel="stylesheet" href="/static/css/bootstrap.css" type="text/css"/>
+		<link  rel="stylesheet" href="/static/css/styles.css" type="text/css"/>
+		<link  rel="stylesheet" href="/static/css/newStyles.css" type="text/css"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+		<script src = "/static/js/bootstrap.min.js"></script>
+	</head>
+
+	<body>
+		<nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Food Sentiment Observatory</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="/index">Home</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Search Types
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">All keywords</a></li>
+              <li><a href="#">Select specific keywords</a></li>
+            </ul>
+          </li>
+          <li><a href="/manual">Manual</a></li>
+        </ul>
+      </div>
+    </nav> 
+		<div class="container" id="mainContainer"> 
+		
+			<div class="col-sm-8"> <h2>Select a location and a search definition</h2></div>
+			<div class="col-md-6">
+			     
+				<form name="searchSpecs" method="post" action="/connectToScript" onsubmit="return validateForm()">
+
+			    <div class="funkyradio">
+			    	<div class="searchDefinition" id="searchType">
+
+				    	<div class="col-sm-8"><h3>Search type</h3></div>
+				    	<div class="col-sm-8" id="searchTypes"></div>
+				        <div class="funkyradio-success">
+				            <input type="radio" name="inputTypes" id="radio1" value="article" />
+				            <label for="radio1">Articles</label>
+				        </div>
+				        <div class="funkyradio-success">
+				            <input type="radio" name="inputTypes" id="radio3" value="specKeywords" />
+				            <label for="radio3">Define keywords for search</label>
+				        </div>
+				        <div class="funkyradio-success">
+				            <input type="radio" name="inputTypes" id="radio4" value="allTweets" />
+				            <label for="radio4">Search all keywords</label>
+				        </div>
+				    </div>
+
+			        <div class="searchDefinition" id="location">
+				        <div class="col-sm-8"><h3>Location</h3></div>
+				        <div class="col-sm-8" id="locations"></div>
+				        <div class="funkyradio-success">
+				            <input type="radio" name="inputLocation" id="radio5" value="England" />
+				            <label for="radio5">England</label>
+				        </div>
+				        <div class="funkyradio-success">
+				            <input type="radio" name="inputLocation" id="radio6" value="Scotland" />
+				            <label for="radio6">Scotland</label>
+				        </div>
+				    </div>
+
+				    <div class="searchDefinition" id="terms">
+				        <div class="col-sm-8"><h3>Discourse</h3></div>
+				        <div class="col-sm-8" id="discourses"></div>
+				        <div class="funkyradio-success">
+				            <input type="radio" name="terms" id="radio7" value="general food hygiene discourse"/>
+				            <label for="radio7">General food hygiene</label>
+				        </div>
+				        <div class="funkyradio-success">
+				            <input type="radio" name="terms" id="radio8" value="fhis" />
+				            <label for="radio8">FHIS</label>
+				        </div>
+				         <div class="funkyradio-success">
+				            <input type="radio" name="terms" id="radio9" value="fhrs" />
+				            <label for="radio9">FHRS</label>
+				        </div>
+				    </div>
+			    </div>
+			    <div class="col-sm-8"><button type="submit" class="btn btn-success">Submit</button></div>
+			    </form>
+			</div>	
+
+	</div>	
+	<script src = "/static/js/scripts.js"></script>
+
+	</body>
+
+</html>	
+
