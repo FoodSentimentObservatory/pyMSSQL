@@ -106,7 +106,6 @@ fieldset {
 	float: right;
 }
 .nav > li a{
-	color: #fff !important;
 	font-weight: bold;
 }
 .navbar-inverse .navbar-brand {
@@ -120,13 +119,15 @@ fieldset {
 
 }
 .nav-tabs >li > a{
-	color: #a4a71e;
+	color: #fff !important;
 }
 .nav-tabs > li.active > a {
 	background: #1f7a1f !important;
+	color: #fff !important;
 } 
 .nav-tabs > li > a:hover {
 	background: #33cc33 !important;
+	color: #fff !important;
 }
 .navbar-inverse .navbar-brand {
 	padding-right: 10px;

@@ -22,7 +22,13 @@ class ServerConnection(object):
 
 	@cherrypy.expose
 	def index(self):
-		return open('interfaces/index.html')
+		
+		searchNotesDic = inputManagment.getSearchNotes()
+
+		template = env.get_template('interfaces/index.html')
+		#sending the tweets and the group data to html
+		return template.render(dicw=searchNotesDic, title="something")
+		#eturn open('interfaces/index.html')
 
 	@cherrypy.expose
 	def manual(self):
@@ -30,9 +36,12 @@ class ServerConnection(object):
 	
 	#direct towards the relevant script
 	@cherrypy.expose
-	def connectToScript(self, inputTypes, inputLocation, terms):
-		self.location = inputLocation
-		self.searchQuery = terms
+	def connectToScript(self, inputTypes, searchnoteID, dbName):
+		self.location = searchnoteID.split("-")[0]
+		self.searchQuery = searchnoteID.split("- ")[1]
+		self.dbName = dbName
+		print (self.location)
+		print (self.searchQuery)
 		if inputTypes == "specKeywords":
 			return open('interfaces/keywordSearch.html')
 		else:	 
@@ -40,7 +49,9 @@ class ServerConnection(object):
 	#script for keyword searches
 	@cherrypy.expose	
 	def keywordSearch(self, group, groups, checkName):			
-			cursor = sqlQueries.connectionToDatabase()	
+			conn = sqlQueries.connectionToDatabaseTest(self.dbName)	
+			cursor = conn.cursor()
+			print(self.dbName)
 			print (self.location)
 			print (self.searchQuery)
 			print (group)
@@ -89,9 +100,10 @@ class ServerConnection(object):
 				index=6
 				dicw = textCleanUp.dictionaryGen(tweetList,index)
 
-				template = env.get_template('interfaces/results.html')
-				#sending the tweets and the group data to html
-				return template.render(dicw=dicw, title="something", groupList=groupList, i=0)
+			template = env.get_template('interfaces/results.html')
+			conn.close()
+			#sending the tweets and the group data to html
+			return template.render(dicw=dicw, title="something", groupList=groupList, i=0)
 
 	@cherrypy.expose	
 	def frequentKeywordSearch(self,group, tweets, word,groupIdStr,groupOriginalName):

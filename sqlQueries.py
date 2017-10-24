@@ -7,68 +7,87 @@ def connectionToDatabase():
     portd = config.databasePort()
     #connection to the database
     conn = pymssql.connect(server,database=databased,port=portd)
-    cursor = conn.cursor()
+    #cursor = conn.cursor()
     print ("Connection to Database successfull")
 
-    return cursor
+    return conn
+
+def connectionToDatabaseTest(dbName):
+    server = config.dbServer()
+    databased = dbName
+    portd = config.databasePort()
+    #connection to the database
+    conn = pymssql.connect(server,database=databased,port=portd)
+    #cursor = conn.cursor()
+    print ("Connection to Database " +dbName+" was successfull")
+
+    return conn
 
 def closeDbConnection():
     conn = connectionToDatabase.conn
     conn.close()    
 #collecting all tweets from all locations for a given search description
 def retrieveAllTweets(cursor, searchDescription):
-    cursor.execute("SELECT [Sprint-1].[dbo].[Post].[Id],[Sprint-1].[dbo].[Post].[hasCreator],\
-    [Sprint-1].[dbo].[Post].[body], [Sprint-1].[dbo].[Post].[createdAt],\
-    [Sprint-1].[dbo].[Post].[platformPostID], [Sprint-1].[dbo].[UserAccount].[platformAccountId], \
-    [Sprint-1].[dbo].[Search].[Note],[Sprint-1].[dbo].[Post].[SearchId]\
-    FROM [Sprint-1].[dbo].[Post]\
-    INNER join [Sprint-1].[dbo].[UserAccount] ON [Sprint-1].[dbo].[UserAccount].[Id]= [Sprint-1].[dbo].[Post].[hasCreator]\
-    INNER join [Sprint-1].[dbo].[Search] ON [Sprint-1].[dbo].[Post].[SearchId]=[Sprint-1].[dbo].[Search].Id\
-    WHERE [Sprint-1].[dbo].[Search].[Note] LIKE '%"+ searchDescription +"%' ORDER BY [Sprint-1].[dbo].[Post].[createdAt] ASC")
+    cursor.execute("SELECT [Post].[Id],[Post].[hasCreator],\
+    [Post].[body], [Post].[createdAt],\
+    [Post].[platformPostID], [UserAccount].[platformAccountId], \
+    [Search].[Note],[Post].[SearchId]\
+    FROM [Post]\
+    INNER join [UserAccount] ON [UserAccount].[Id]= [Post].[hasCreator]\
+    INNER join [Search] ON [Post].[SearchId]=[Search].Id\
+    WHERE [Search].[Note] LIKE '%"+ searchDescription +"%' ORDER BY [Post].[createdAt] ASC")
 
     row = cursor.fetchall()
 
     return row
 #collecting all tweets containing a keyword from a given search
 def retrieveTweetsByKeyword(cursor, keyword, searchDescription):
-    cursor.execute("SELECT [Sprint-1].[dbo].[Post].[Id],[Sprint-1].[dbo].[Post].[hasCreator],\
-    [Sprint-1].[dbo].[Post].[body], [Sprint-1].[dbo].[Post].[createdAt],\
-    [Sprint-1].[dbo].[Post].[platformPostID], [Sprint-1].[dbo].[UserAccount].[platformAccountId], \
-    [Sprint-1].[dbo].[Search].[Note],[Sprint-1].[dbo].[Post].[SearchId]\
-    FROM [Sprint-1].[dbo].[Post]\
-    INNER join [Sprint-1].[dbo].[UserAccount] on [Sprint-1].[dbo].[UserAccount].[Id]= [Sprint-1].[dbo].[Post].[hasCreator]\
-    INNER join [Sprint-1].[dbo].[Search] ON [Sprint-1].[dbo].[Post].[SearchId]=[Sprint-1].[dbo].[Search].Id\
-    WHERE [Sprint-1].[dbo].[Post].[body] LIKE '%"+ keyword +"%' AND  [Sprint-1].[dbo].[Search].[Note] LIKE '%"+ searchDescription +"%'\
-    ORDER BY [Sprint-1].[dbo].[Post].[createdAt] ASC ")
+    cursor.execute("SELECT [Post].[Id],[Post].[hasCreator],\
+    [Post].[body], [Post].[createdAt],\
+    [Post].[platformPostID], [UserAccount].[platformAccountId], \
+    [Search].[Note],[Post].[SearchId]\
+    FROM [Post]\
+    INNER join [UserAccount] on [UserAccount].[Id]= [Post].[hasCreator]\
+    INNER join [Search] ON [Post].[SearchId]=[Search].Id\
+    WHERE [Post].[body] LIKE '%"+ keyword +"%' AND  [Search].[Note] LIKE '%"+ searchDescription +"%'\
+    ORDER BY [Post].[createdAt] ASC ")
 
     result = cursor.fetchall()
     return result
 #collecting all tweets from a given search from a given location
 def locationQuery(cursor,searchDescription, location):
-     cursor.execute("SELECT [Sprint-1].[dbo].[Post].[Id],[Sprint-1].[dbo].[Post].[hasCreator],\
-     [Sprint-1].[dbo].[Post].[body], [Sprint-1].[dbo].[Post].[createdAt],\
-     [Sprint-1].[dbo].[Post].[platformPostID], [Sprint-1].[dbo].[UserAccount].[platformAccountId],\
-     [Sprint-1].[dbo].[Post].[SearchId] \
-     FROM [Sprint-1].[dbo].[Post] \
-     INNER join [Sprint-1].[dbo].[Search] ON [Sprint-1].[dbo].[Post].[SearchId]=[Sprint-1].[dbo].[Search].Id \
-     INNER join [Sprint-1].[dbo].[UserAccount] ON [Sprint-1].[dbo].[UserAccount].[Id]= [Sprint-1].[dbo].[Post].[hasCreator]\
-     WHERE [Sprint-1].[dbo].[Search].[Note] LIKE '%"+ searchDescription +"%' AND [Sprint-1].[dbo].[Search].[Note] LIKE '%"+ location +"%'\
-     ORDER BY [Sprint-1].[dbo].[Post].[createdAt] ASC")
+     cursor.execute("SELECT [Post].[Id],[Post].[hasCreator],\
+     [Post].[body], [Post].[createdAt],\
+     [Post].[platformPostID], [UserAccount].[platformAccountId],\
+     [Post].[SearchId] \
+     FROM [Post] \
+     INNER join [Search] ON [Post].[SearchId]=[Search].Id \
+     INNER join [UserAccount] ON [UserAccount].[Id]= [Post].[hasCreator]\
+     WHERE [Search].[Note] LIKE '%"+ searchDescription +"%' AND [Search].[Note] LIKE '%"+ location +"%'\
+     ORDER BY [Post].[createdAt] ASC")
      row = cursor.fetchall()
 
      return row
 #collecting all tweets from a given search from a given location containing a given keyword
 def locationQueryKeyword(cursor, keyword,searchDescription, location):
-     cursor.execute("SELECT [Sprint-1].[dbo].[Post].[Id],[Sprint-1].[dbo].[Post].[hasCreator],\
-     [Sprint-1].[dbo].[Post].[body], [Sprint-1].[dbo].[Post].[createdAt], [Sprint-1].[dbo].[Post].[platformPostID],\
-     [Sprint-1].[dbo].[UserAccount].[platformAccountId],[Sprint-1].[dbo].[Search].[Note], [Sprint-1].[dbo].[Post].[SearchId],\
-     [Sprint-1].[dbo].[UserAccount].[verified],[Sprint-1].[dbo].[UserAccount].[displayName] \
-     FROM [Sprint-1].[dbo].[Post]\
-     INNER join [Sprint-1].[dbo].[Search] ON [Sprint-1].[dbo].[Post].[SearchId]=[Sprint-1].[dbo].[Search].Id\
-     INNER join [Sprint-1].[dbo].[UserAccount] ON [Sprint-1].[dbo].[UserAccount].[Id]= [Sprint-1].[dbo].[Post].[hasCreator]\
-     WHERE [Sprint-1].[dbo].[Search].[Note] LIKE '%"+ searchDescription +"%' AND [Sprint-1].[dbo].[Search].[Note] LIKE '%"+ location +"%'\
-     AND [Sprint-1].[dbo].[Post].[body] LIKE '%"+ keyword +"%'\
-     ORDER BY [Sprint-1].[dbo].[Post].[createdAt] ASC")
+     cursor.execute("SELECT [Post].[Id],[Post].[hasCreator],\
+     [Post].[body], [Post].[createdAt], [Post].[platformPostID],\
+     [UserAccount].[platformAccountId],[Search].[Note], [Post].[SearchId],\
+     [UserAccount].[verified],[UserAccount].[displayName] \
+     FROM [Post]\
+     INNER join [Search] ON [Post].[SearchId]=[Search].Id\
+     INNER join [UserAccount] ON [UserAccount].[Id]= [Post].[hasCreator]\
+     WHERE [Search].[Note] LIKE '%"+ searchDescription +"%' AND [Search].[Note] LIKE '%"+ location +"%'\
+     AND [Post].[body] LIKE '%"+ keyword +"%'\
+     ORDER BY [Post].[createdAt] ASC")
      row = cursor.fetchall()
 
      return row
+
+def sprintNotesQuery(cursor,dbName):
+    cursor.execute("SELECT Distinct [Search].[Note]  FROM [Search]")
+
+    row = cursor.fetchall()
+
+    return row    
+

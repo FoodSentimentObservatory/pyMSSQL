@@ -81,21 +81,17 @@
 		//checks if every section of the homepage form has a value	
 		function validateForm()	{
 			var x = document.forms["searchSpecs"]["inputTypes"].value;
-			var y = document.forms["searchSpecs"]["inputLocation"].value;
-			var z = document.forms["searchSpecs"]["terms"].value;
+			var y = document.forms["searchSpecs"]["searchnoteID"].value;
+			
 		    if (x == "") {
 		    	alertMessageDiv= "<div class='alert alert-danger' role='alert'><strong>Oh snap!</strong> You must select a search type</div>"
 		        document.getElementById("searchTypes").innerHTML = alertMessageDiv;
 		        return false;
 		    } else if (y == ""){
-		    	alertMessageDiv= "<div class='alert alert-danger' role='alert'><strong>Oh snap!</strong> You must select a location</div>"
-		        document.getElementById("locations").innerHTML = alertMessageDiv;
+		    	alertMessageDiv= "<div class='alert alert-danger' role='alert'><strong>Oh snap!</strong> You must select a search definition.</div>"
+		        document.getElementById("searchDefs").innerHTML = alertMessageDiv;
 		        return false;
-		    } else if (z==""){
-		    	alertMessageDiv= "<div class='alert alert-danger' role='alert'><strong>Oh snap!</strong> You must select a discourse</div>"
-		        document.getElementById("discourses").innerHTML = alertMessageDiv;
-		        return false;
-		    }
+		    } 
 		};
 		//checking if there are any groups specified, if not, throw an error
 		function checkForGroups() {
@@ -125,5 +121,10 @@
 		// Animate loader off screen
 		$(".se-pre-con").fadeOut("slow");;
 	});
+
+	function setDb(dbName){
+		document.getElementById("dbName").value = dbName;
+		console.log(document.getElementById("dbName").value);
+	}	
 
 		

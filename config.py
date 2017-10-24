@@ -87,3 +87,11 @@ def databasePort():
 def dbServer():
     server = parser.get('db-data', 'server')
     return server
+
+def getDbSprintOne():
+    database = parser.get('db-data', 'db')
+    return database
+    
+def getDbSprintTwo():
+    database = parser.get('db-data', 'dbSprintTwo')
+    return database

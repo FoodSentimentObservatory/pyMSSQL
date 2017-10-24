@@ -1,7 +1,7 @@
 [file-paths]
-generaldiscourse = file/path/to/data/generaldiscourse.txt
-fhisdiscourse = file/path/to/data/fhisdiscourse.txt
-fhrsdiscourse = file/path/to/data/fhrsDisourse.txt
+generaldiscourse = path/to/data/generalDiscourseKeywords.txt
+fhisdiscourse = path/to/data/fhisKeywords.txt
+fhrsdiscourse = path/to/data/fhrsKeywords.txt
 
 [search-terms]
 genfoodhygiene = general food hygiene discourse
@@ -10,19 +10,19 @@ fhrsdiscourseboth = fhrs discourse
 
 [search-definitions]
 general = 0
-fhis = 1
-fhrs = 0
+fhis = 0
+fhrs = 1
 textFiles = 0
 
 [result-paths]
-genboth = folder/path/to/statistics/generalDiscourse
-fhisboth = folder/path/to/statistics/fhis
-fhrsboth = folder/path/to/statistics/fhrs
-tweetsscotland = folder/path/to/tweetFolder/scotland
-tweetsengland = folder/path/to/tweetFolder/england
-alltweets = folder/path/to/tweetFolder/all
-rawTweets = folder/path/to/raw-tweets
-textFiles =folder/path/to/texts
+genboth = path/to/statistics/both
+fhisboth = path/to/statistics/fhis/both
+fhrsboth = path/to/statistics/fhrs/both
+tweetsscotland = path/to/tweets-2/scotland
+tweetsengland = path/to/tweets-2/england
+alltweets = path/to/tweets-2/all
+rawTweets = path/to/raw-tweets
+textFiles = path/to/texts
 
 [search-location]
 england = 0
@@ -30,7 +30,12 @@ scotland = 0
 both = 1
 
 [db-data]
-db = dbName
+db = 
+dbSprintTwo = 
 port = 
 server = 
 
+[sprints]
+sprintOne = 1
+sprintTwo = 0
+sprintThree = 0

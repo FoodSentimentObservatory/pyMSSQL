@@ -22,8 +22,9 @@
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Search Types
             <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="#">All keywords</a></li>
-              <li><a href="#">Select specific keywords</a></li>
+              <li><a href="#">Sprint 1</a></li>
+              <li><a href="#">Sprint 2</a></li>
+              <li><a href="#">Sprint 2</a></li>
             </ul>
           </li>
           <li><a href="/manual">Manual</a></li>
@@ -39,7 +40,7 @@
 
 			    <div class="funkyradio">
 			    	<div class="searchDefinition" id="searchType">
-
+			    		<input type="hidden" name="dbName" id="dbName" value="">
 				    	<div class="col-sm-8"><h3>Search type</h3></div>
 				    	<div class="col-sm-8" id="searchTypes"></div>
 				        <div class="funkyradio-success">
@@ -48,43 +49,36 @@
 				        </div>
 				        <div class="funkyradio-success">
 				            <input type="radio" name="inputTypes" id="radio3" value="specKeywords" />
-				            <label for="radio3">Define keywords for search</label>
+				            <label for="radio3">Keyword Search</label>
 				        </div>
 				        <div class="funkyradio-success">
 				            <input type="radio" name="inputTypes" id="radio4" value="allTweets" />
-				            <label for="radio4">Search all keywords</label>
+				            <label for="radio4">Keyword Search - exact appearences only</label>
 				        </div>
 				    </div>
 
-			        <div class="searchDefinition" id="location">
-				        <div class="col-sm-8"><h3>Location</h3></div>
-				        <div class="col-sm-8" id="locations"></div>
-				        <div class="funkyradio-success">
-				            <input type="radio" name="inputLocation" id="radio5" value="England" />
-				            <label for="radio5">England</label>
-				        </div>
-				        <div class="funkyradio-success">
-				            <input type="radio" name="inputLocation" id="radio6" value="Scotland" />
-				            <label for="radio6">Scotland</label>
-				        </div>
-				    </div>
+				     <h3>Choose a sprint</h3>
+				     <div class="col-sm-8" id="searchDefs"></div>
+				     <div class="searchDefinition" id="searchNote">
 
-				    <div class="searchDefinition" id="terms">
-				        <div class="col-sm-8"><h3>Discourse</h3></div>
-				        <div class="col-sm-8" id="discourses"></div>
-				        <div class="funkyradio-success">
-				            <input type="radio" name="terms" id="radio7" value="general food hygiene discourse"/>
-				            <label for="radio7">General food hygiene</label>
-				        </div>
-				        <div class="funkyradio-success">
-				            <input type="radio" name="terms" id="radio8" value="fhis" />
-				            <label for="radio8">FHIS</label>
-				        </div>
-				         <div class="funkyradio-success">
-				            <input type="radio" name="terms" id="radio9" value="fhrs" />
-				            <label for="radio9">FHRS</label>
-				        </div>
+						<ul class="list-group">
+						{% for key, values in dicw.items() %}
+					        <li class="list-group-item">
+					        <a data-toggle="collapse" href="#{{key}}" style="color: #000;">{{key}}</a>	        	
+					            <ul class="list-group collapse" id="{{key}}">
+					                <h4>Choose a search</h4>
+					                {% for v in values %}
+					                <div class="funkyradio-success">
+									    <input type="radio" name="searchnoteID" id="{{v[3]}}" value="{{v[0]}}" onclick="setDb('{{v[4]}}')"/>
+									    <label for="{{v[3]}}">{{v[0]}}</label>
+									</div>
+									{% endfor %}           
+					            </ul>
+					        </li>	        
+					    {% endfor %}    
+					    </ul>
 				    </div>
+  
 			    </div>
 			    <div class="col-sm-8"><button type="submit" class="btn btn-success">Submit</button></div>
 			    </form>

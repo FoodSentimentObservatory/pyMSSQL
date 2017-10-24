@@ -2,7 +2,7 @@ from configparser import SafeConfigParser
 import sqlQueries
 import config
 import html
-
+import textCleanUp
 parser = SafeConfigParser()
 parser.read('config.txt')
 
@@ -114,3 +114,56 @@ def groupSearch(cursor, location,searchQuery, group):
     print ("-------------------------------------S")
 
     return groupRow
+
+def getSearchNotes():
+    dbSprintOne = config.getDbSprintOne()
+    dbSprintTwo = config.getDbSprintTwo()
+
+    sprintOne = "Sprint-1"
+    sprintTwo = "Sprint-2"
+
+    sprintOneNotes = getSprintNotes(dbSprintOne,sprintOne)
+    sprintTwoNotes = getSprintNotes(dbSprintTwo,sprintTwo)
+
+    sprintNotesList = [sprintOneNotes,sprintTwoNotes]
+
+    noteList = [item for sprint in sprintNotesList for item in sprint]
+    n=5
+    newNoteList =[]
+    for note in noteList:
+        idstr= "radio"+str(n)
+        newNoteTup = (note[0],note[1],note[2],idstr, note[3])
+        newNoteList.append(newNoteTup)
+        n+=1
+    i = 1
+    dicNotes = textCleanUp.dictionaryGen(newNoteList,i)
+
+    return dicNotes
+
+def getSprintNotes(sprintDb, sprint):
+    conn = sqlQueries.connectionToDatabaseTest(sprintDb)
+    cursor = conn.cursor()
+
+    sprintNotes = sqlQueries.sprintNotesQuery(cursor, sprintDb)   
+    newSprintNoteList=[]
+    alreadySeenNotes = []
+    for note in sprintNotes:
+        if "(" in note[0]:
+            newNoteS = note[0].split("(",1)[0]
+            newNoteM = newNoteS.split("-")[-1]
+            location = note[0].split(" ",1)[0]
+            newNote = location + " -"+newNoteM
+
+        else:
+            newNoteS = str(note[0]).split("-")[-1] 
+            locationS = str(note[0]).split("-")[0]
+            location = locationS.split(" ")[0]
+            newNote = location + " -"+newNoteS
+
+        if newNote not in alreadySeenNotes:
+            noteTup = (newNote, sprint, location,sprintDb)
+            newSprintNoteList.append(noteTup)
+            alreadySeenNotes.append(newNote)
+      
+    return newSprintNoteList 
+    conn.close()
