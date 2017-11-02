@@ -93,7 +93,10 @@ fieldset {
 	opacity: 1;				
 }
 .space {
-	margin-left: 0.5em;
+	margin-left: 2px !important;
+	margin-bottom: 2px !important;
+	border-radius: 3px !important;
+}
 }
 #closeButton{
 	float: right;
@@ -165,7 +168,7 @@ fieldset {
   background-color: #000;
   text-align: center;
 }
-#unstyled ul{
+.unstyled ul{
 	list-style-type: none;
 }
 .modal-body{
@@ -183,4 +186,74 @@ fieldset {
 	z-index: 9999;
 	background: url(images/loader-128x/Preloader_3.gif) center no-repeat #fff;
 
+}
+
+#info{
+	width:100%;					
+	background: white;
+	color: black;
+	border: 1px solid #E6E6FA;
+	border-radius: 10px;
+	padding: 1em;
+	margin-bottom: 1em;
+}
+.headers{
+	border-bottom: 1px solid #E6E6FA;
+	margin-bottom: 1em;
+}
+#eitherOrHeader {
+	border-right: 1px solid #E6E6FA;
+	
+}
+#timeframeHeader {
+	padding-left: 1em;
+}
+#map{
+	min-height: 300px;
+}
+
+
+    .ui-helper-hidden-accessible {
+
+          border: 0;
+
+          clip: rect(0 0 0 0);
+
+          height: 1px;
+
+          margin: -1px;
+
+          overflow: hidden;
+
+          padding: 0;
+
+          position: absolute;
+
+          width: 1px;
+    }
+ul.ui-autocomplete {
+    z-index: 1150;
+}
+.ui-menu {
+	width: 200px !important;
+
+}
+.ui-autocomplete {
+    background:  	#F5FFFA;
+    border-radius: 4px;
+    padding: 0px !important;
+    border:1px solid #E6E6FA;
+}
+.ui-menu .ui-menu-item {
+    background:transparent;
+    height:30px;
+	font-size:15px;
+	padding: 0.5em;
+	border-bottom: 1px solid #E6E6FA;
+	list-style-type: none;
+}
+.ui-menu .ui-menu-item:hover {
+    background: #32CD32;
+    color: #fff;
+    font-weight: bold;
 }

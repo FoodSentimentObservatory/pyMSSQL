@@ -36,24 +36,29 @@ class ServerConnection(object):
 	
 	#direct towards the relevant script
 	@cherrypy.expose
-	def connectToScript(self, inputTypes, searchnoteID, dbName):
+	def connectToScript(self, inputTypes, searchnoteID, dbName, start, endof,keywords):
 		self.location = searchnoteID.split("-")[0]
 		self.searchQuery = searchnoteID.split("- ")[1]
 		self.dbName = dbName
-		print (self.location)
-		print (self.searchQuery)
+		self.startDate = start
+		self.endof = endof
 		if inputTypes == "specKeywords":
-			return open('interfaces/keywordSearch.html')
+			template = env.get_template('interfaces/keywordSearch.html')
+			#sending the tweets and the group data to html
+			return template.render(startDate=self.startDate, endDate=self.endof, title="something")
+
 		else:	 
 			return inputTypes 	
 	#script for keyword searches
 	@cherrypy.expose	
-	def keywordSearch(self, group, groups, checkName):			
+	def keywordSearch(self, group, groups, checkName,fromDate,toDate):			
 			conn = sqlQueries.connectionToDatabaseTest(self.dbName)	
 			cursor = conn.cursor()
 			print(self.dbName)
 			print (self.location)
 			print (self.searchQuery)
+			print (fromDate)
+			print (toDate)
 			print (group)
 			listOfGroups=[]
 			listOfTweets=[]
@@ -70,22 +75,27 @@ class ServerConnection(object):
 			if  len(group)>0:
 				countOfGroups = len(listOfGroups)
 				#getting all tweets with the specified keywords, the result is a list of lists, tweets are grouped in lists by keyword groups
-				tweets=inputManagment.fetchingTweetsContainingGroups(cursor,self.location,self.searchQuery,listOfGroups)
+				print(listOfGroups)
+				tweets=inputManagment.fetchingTweetsContainingGroups(cursor,self.location,self.searchQuery,listOfGroups, fromDate, toDate)
 				i=0
 				tweetList=[]
 				groupList = []
 				#for each group of tweets (all tweets fetched for one group of keywords)
 				for groupOfTweets in tweets:
 					numberOfTweets = len(groupOfTweets)
-					strGroupOfTweets = ''.join(group[i])
+					if len(listOfGroups)>1:
+						strGroupOfTweets = ''.join(group[i])
+						frequentWords = textCleanUp.frequencyCount(groupOfTweets,group[i])
+					else:
+						strGroupOfTweets = ''.join(group)	
+						frequentWords = textCleanUp.frequencyCount(groupOfTweets,group)
 					noCommaGroupOfTweets = strGroupOfTweets.replace(',','')
 					#getting the most frequent words in that group
-					frequentWords = textCleanUp.frequencyCount(groupOfTweets,group[i])
+					
 					
 					#sending to html the keyword group name, ID, number of tweets in it and a list of the most frequent words		
 					groupTup = (noCommaGroupOfTweets, strGroupOfTweets,i,numberOfTweets,frequentWords, groupOfTweets)
 					groupList.append(groupTup)
-
 					i+=1
 
 					for tweet in groupOfTweets:

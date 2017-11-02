@@ -11,6 +11,7 @@
 	</head>
 
 	<body>
+	<div class="se-pre-con"></div>
 		<nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
@@ -34,11 +35,11 @@
 		<div class="container" id="mainContainer"> 
 		
 			<div class="col-sm-8"> <h2>Select a location and a search definition</h2></div>
-			<div class="col-md-6">
+			<div class="col-md-12">
 			     
 				<form name="searchSpecs" method="post" action="/connectToScript" onsubmit="return validateForm()">
 
-			    <div class="funkyradio">
+			    <div class="funkyradio col-md-6">
 			    	<div class="searchDefinition" id="searchType">
 			    		<input type="hidden" name="dbName" id="dbName" value="">
 				    	<div class="col-sm-8"><h3>Search type</h3></div>
@@ -56,36 +57,59 @@
 				            <label for="radio4">Keyword Search - exact appearences only</label>
 				        </div>
 				    </div>
-
+				</div>
+				<div class="col-md-6" id="map"></div>
+				<div class="col-md-12">					  
 				     <h3>Choose a sprint</h3>
-				     <div class="col-sm-8" id="searchDefs"></div>
+				     <div class=" funkyradio col-md-6"> 
+				     <div id="searchDefs"></div>
 				     <div class="searchDefinition" id="searchNote">
-
-						<ul class="list-group">
-						{% for key, values in dicw.items() %}
-					        <li class="list-group-item">
-					        <a data-toggle="collapse" href="#{{key}}" style="color: #000;">{{key}}</a>	        	
-					            <ul class="list-group collapse" id="{{key}}">
-					                <h4>Choose a search</h4>
-					                {% for v in values %}
-					                <div class="funkyradio-success">
-									    <input type="radio" name="searchnoteID" id="{{v[3]}}" value="{{v[0]}}" onclick="setDb('{{v[4]}}')"/>
-									    <label for="{{v[3]}}">{{v[0]}}</label>
-									</div>
-									{% endfor %}           
-					            </ul>
-					        </li>	        
-					    {% endfor %}    
-					    </ul>
+				     	<div class="panel-group" id="accordion">
+							<input type="hidden" name="start" id="start" value="">
+							<input type="hidden" name="endof" id="endof" value="">
+							{% for key, values in dicw.items() %}
+						        <div class="panel panel-default">
+						        <div class="panel-heading">
+							        <h4 class="panel-title">
+							          <a data-toggle="collapse" data-parent="#accordion" href="#{{key}}">{{key}}</a>
+							        </h4>
+							      </div>
+						              	
+						            <div id="{{key}}" class="panel-collapse collapse">
+						            	<div class="panel-body">
+							                <h4>Choose a search</h4>
+							                {% for v in values %}
+							                <div class="funkyradio-success">
+											    <input type="radio" name="searchnoteID" id="{{v[3]}}" value="{{v[0]}}" onclick="setDb('{{v[4]}}'); displaySearchData('{{v[0]}}','{{v[5]}}','{{v[6]}}','{{v[7]}}', '{{v[8]}}', '{{v[9]}}')"/>
+											    <input type="hidden" name="keywords" id="keywordList" value="{{v[7]}}">
+											    <label for="{{v[3]}}">{{v[0]}}</label>
+											</div>
+											{% endfor %} 
+										</div>	          
+						            </div>
+						        </div>	        
+						    {% endfor %}    
+						   
+					    </div>
 				    </div>
   
 			    </div>
+			    <div id="searchData" class="col-md-6"></div>
 			    <div class="col-sm-8"><button type="submit" class="btn btn-success">Submit</button></div>
+			    </div>
 			    </form>
-			</div>	
+			</div>
+				
 
 	</div>	
 	<script src = "/static/js/scripts.js"></script>
+	<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBiDjEvKnfBfWVueTpAkF1jjLWQCy-LSSw&callback=initMap">
+    </script>
+    <script >
+    var keyword = document.getElementById("keywordList").value;
+    	localStorage.setItem( 'objectToPass', keyword );
+    </script>
 
 	</body>
 

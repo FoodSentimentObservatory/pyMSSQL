@@ -12,6 +12,7 @@ from itertools import groupby
 nlp = spacy.load("en")
 spacyStopWords.stopWordsList(nlp)
 #function to remove stop words, urls, punctuation, numbers and symbols using spacy. Goes through each tweet text and appends the result to two lists, one for the tweet and one for general statistics
+#removing also words like e.coli?
 def textCleanup(allWords,text):
     for word in text:
                 words =re.sub(r'@', "", str(word))
@@ -20,7 +21,6 @@ def textCleanup(allWords,text):
                     allWords.append(words.lower())
 #does a frequency count of words across the whole corpus given to it using spacy and also generates a list of repeated words and unique words
 def frequencyCount(tweets, group):
-
     allWords = []
     repeatedWords=[]
     uniqueWords=[]
