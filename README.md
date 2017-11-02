@@ -43,25 +43,12 @@ This project works with **Microsoft SQL Server Management Studio** as database e
 
 Create a database using the **script.sql** (change the name of the database and the paths towards the MSQLSMS directory on your machine first). Populate the database using the [data-collectors](https://github.com/FoodSentimentObservatory/data-collectors) scripts.
 
-There is a sample config file structure in config.txt. Need to specify result directory paths (see **Result directories**), paths to the keyword files contained in the data folder which already exists in the package and database configuration.
-
-Sample keyword files for filtering and grouping in datasets are available in the data folder.
-
-Before running the code, go to config.txt and set the desired search-definition value to 1.
-
-```
-If you want to process general food discourse data, in the search-definition tag set `general` to 1.
-
-The code will then automatically select the needed keyword file, generalDiscourse.txt, available the data folder.
-
-It will also select the search term that will be needed to sift through the database and collect only tweets 
-from that discourse search. In this case from the tag `search-terms` it will select `genfoodhygiene`.
-```
+Configuration of database and search terms now all done through the interface, no need to touch the config file.
 
 ## Running the code
 
 As mentioned in the begining, this branch's main purpose is for interface development. For text file generation and csv file generation, please refer to the code in the main branch.
 
 In order to access the interface, in commandline, navigate to the folder containing cherryPyTestConnection.py and run that file.
-This will start the server and that script will take care of all tasks. Open a browser (the interface has been tested with Firefox and Chrome so far and it's working fine), go to `http://localhost:8080/index`. There you should fine the home page. For navigating yourself through the web app, there is a short manual that can be accessed through the menu bar.
+This will start the server and that script will take care of all tasks. Open a browser (the interface has been tested with Firefox and Chrome so far and it's working fine), go to `http://localhost:8080/index`. There you should find the home page. For navigating yourself through the web app, there is a short manual that can be accessed through the menu bar.
 
