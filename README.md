@@ -31,16 +31,24 @@ There is a sample config file structure in config.txt. Need to specify result di
 
 Sample keyword files for filtering and grouping in datasets are available in the data folder.
 
-Before running the code, go to config.txt and set the desired search-definition value to 1.
+Before running the code, go to config.txt and set the desired search-definition value and the relevant sprint-number to 1.
 
 ```
-If you want to process general food discourse data, in the search-definition tag set `general` to 1.
+If you want to process general food discourse data, in the search-definition tag set `general` to 1 and in sprint-number, set sprintOne to 1.
 
-The code will then automatically select the needed keyword file, generalDiscourse.txt, available the data folder.
+The code will then automatically select the needed keyword file, generalDiscourse.txt, available the data folder and it will connect to the relevant database.
 
 It will also select the search term that will be needed to sift through the database and collect only tweets 
 from that discourse search. In this case from the tag `search-terms` it will select `genfoodhygiene`.
 ```
+#### Sprint 1 database
+Relevant discourses: general, fhis and fhrs
+
+#### Sprint 2 database
+Relevant discourses: cheese, burgers, experiment three
+
+#### Sprint 3 database
+Not conducted yet.
 
 ## Running the code
 
@@ -78,6 +86,8 @@ Used for filtering text files (e.g. articles from newspapers) and generating fil
 
 **Note: ** this script can only be ran through main.py. When prompted to provide a path or hit enter, a path should be provided.
 
+**Note: ** currently for sprint 2 the options for England have been commented out because they were creating confustion in the counts. Need to see what causes that problem.
+
 ## Result directories
 
 ### Needs directories for: 
@@ -111,6 +121,8 @@ All files from **test.py**, **articleCleanUp** and **raw-tweets** are automatica
 *  a csv count containing counts of how many tweets containing a given keyword are there after retweet removal, how many of them are from Scotland and how many are from England 
 
 * for each keyword set from a location, a text file is created, which is in a ready to use format for jst, only needs to be copied to the data folder of jst
+
+** Note: ** follow the folder structer from the result-paths tag in the config file, as it makes it easier to differentiate between sprint results.
 
 ## After processing
 
