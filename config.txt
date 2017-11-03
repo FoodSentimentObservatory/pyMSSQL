@@ -1,36 +1,60 @@
 [file-paths]
-generaldiscourse = file/path/to/data/generaldiscourse.txt
-fhisdiscourse = file/path/to/data/fhisdiscourse.txt
-fhrsdiscourse = file/path/to/data/fhrsDisourse.txt
+generaldiscourse = path/to/data/generaldiscourse.txt
+fhisdiscourse = path/to/data/fhisdiscourse.txt
+fhrsdiscourse = path/to/data/fhrsDisourse.txt
+cheeseFile = path/to/data/cheeseWords.txt
+burgerFile = path/to/data/burgersWords.txt
+experimentThreeFile = path/toe/data/keywords_vomit_diarrhea.txt
 
 [search-terms]
 genfoodhygiene = general food hygiene discourse
 fhisdiscourseboth = fhis discourse
 fhrsdiscourseboth = fhrs discourse
+cheeseTerm = cheese
+burgersTerm = burgers
+experimentThreeTerm = experiment three
 
 [search-definitions]
 general = 0
-fhis = 1
+fhis = 0
 fhrs = 0
 textFiles = 0
+cheese = 0
+burgers = 0
+experimentThree = 1
 
 [result-paths]
-genboth = folder/path/to/statistics/generalDiscourse
-fhisboth = folder/path/to/statistics/fhis
-fhrsboth = folder/path/to/statistics/fhrs
-tweetsscotland = folder/path/to/tweetFolder/scotland
-tweetsengland = folder/path/to/tweetFolder/england
-alltweets = folder/path/to/tweetFolder/all
-rawTweets = folder/path/to/raw-tweets
-textFiles =folder/path/to/texts
+genboth =path/to/Sprint-1/statistics/generalDiscourse
+fhisboth = path/to/Sprint-1/statistics/fhis
+fhrsboth = path/to/Sprint-1/statistics/fhrs
+tweetsscotland = path/to/Sprint-1/tweetFolder/scotland
+tweetsengland = path/to/Sprint-1/tweetFolder/england
+alltweets = path/to/Sprint-1/tweetFolder/all
+rawTweets = path/to/Sprint-1/raw-tweets
+textFiles =path/to/Sprint-1/texts
+cheeseStats = path/to/Sprint-2/cheese/statistics
+cheeseTweets = path/to/Sprint-2/cheese/tweetFolder
+rawCheeseTweets = path/to/Sprint-2/cheese/raw-tweets
+burgersTweets = path/to/Sprint-2/burgers/tweetFolder
+burgersStats = path/to/Sprint-2/burgers/statistics
+rawBurgersTweets = path/to/Sprint-2/burgers/raw-tweets
+experimentThreeTweets = path/to/Sprint-2/experimentThree/tweetFolder
+experimentThreeStats = path/to/Sprint-2/experimentThree/statistics
+experimentThreeRawTweets = path/to/Sprint-2/experimentThree/raw-tweets/
 
 [search-location]
 england = 0
-scotland = 0
-both = 1
+scotland = 1
+both = 0
 
 [db-data]
-db = dbName
+dbSprintOne = Sprint-1-db-name
+dbSprintTwo = Sprint-2--db-name
+dbSprintThree = Sprint-3-db-name
 port = 
 server = 
 
+[sprint-number]
+sprintOne = 0
+SprintTwo = 1
+SprintThree = 0
