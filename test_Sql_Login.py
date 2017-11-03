@@ -35,7 +35,8 @@ spacyStopWords.stopWordsList(nlp)
 def connect():
     try:
         #connection to database
-        cursor = sqlQueries.connectionToDatabase()
+        conn = sqlQueries.connectionToDatabaseTest()
+        cursor = conn.cursor()
        
         #getting the keywords file
         searchQuery = config.searchStringForSqlQuery()
@@ -49,12 +50,14 @@ def connect():
         rowSc = inputManagment.fetchingTweets(cursor, locationSc, searchQuery)
         rowEn = inputManagment.fetchingTweets(cursor, locationEn, searchQuery)
 
+        print (len(rowSc))
+
         tweetCount = len(rowSc)+len(rowEn)
 
         print ("Found "+str(tweetCount)+" tweets.")
         #clean the list from duplicating tweets using removeDupsAndRetweets function and sorting the result by date
-        rowScUniques=textCleanUp.removeDupsAndRetweets(rowSc)
-        rowEnUniques=textCleanUp.removeDupsAndRetweets(rowEn)
+        rowScUniques=textCleanUp.removeDupsAndRetweets(rowSc,locationSc)
+        rowEnUniques=textCleanUp.removeDupsAndRetweets(rowEn,locationEn)
         #sorting the tweets by date
         sortedRowSc = sorted(rowScUniques, key=itemgetter(3))
         sortedRowEn = sorted(rowEnUniques, key=itemgetter(3))

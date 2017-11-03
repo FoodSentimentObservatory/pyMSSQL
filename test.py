@@ -22,48 +22,58 @@ nlp = spacy.load("en")
 server = 'localhost'
 spacyStopWords.stopWordsList(nlp)
 def connect():
-  
-            cursor = sqlQueries.connectionToDatabase()
+            conn = sqlQueries.connectionToDatabaseTest()
+            cursor = conn.cursor()
+            #cursor = sqlQueries.connectionToDatabase()
             filterKeywords= fileFunctions.readKeywordFile()
             #initiating a list for a total count statistics file
-            listOfKeywords = [("keyword", "total count", "England", "Scotland")]
+            listOfKeywords = [("keyword", "total count",  "Scotland")]
             locationSc = "Scotland"
-            locationEn = "England" 
+            #locationEn = "England" 
             searchQuery = config.searchStringForSqlQuery()
 
             for word in filterKeywords:
+                print ("Search for '"+word+"' for all locations in the database has begun.")
                 #searching and collecting from database all words with that keyword in two datasets by location
-                print ("Search for word '"+word+"' for all locations in the database has begun.")
-                resultSc = sqlQueries.locationQueryKeyword(cursor, word,searchQuery, locationSc)
-                resultEn = sqlQueries.locationQueryKeyword(cursor, word,searchQuery, locationEn)
+                if "+" in word:
+                    wordList = word.split("+")
+                    print (wordList)
+                    resultSc=inputManagment.searchForGroup(cursor, wordList,searchQuery,locationSc)
+                    #resultEn=inputManagment.searchForGroup(cursor, wordList,searchQuery,locationEn)
+                else:
+                    resultSc = inputManagment.searchForKeyword(cursor, word,searchQuery,locationSc)
+                    #resultEn = inputManagment.searchForKeyword(cursor, word,searchQuery,locationEn)
 
-                countEn = len(resultEn)
+                #countEn = len(resultEn)
                 countSc = len(resultSc)
-                count = countEn+countSc
-                print ("Search for '"+word+"' has finished. There were "+str(count)+" tweets containing '"+word+"' in the database." )
+                count = countSc
+                print ("Search for '"+word+"' has finished. There were "+str(countSc)+" tweets containing '"+word+"' in the database." )
                 print (" ")
                 #if any tweets have been discovered, move to the processing texts stage
                 if count>0:
                     fileString=word+"_forVis"
 
                     rowSc = textCleanUp.removeDupsAndRetweets(resultSc, locationSc)
-                    rowEn = textCleanUp.removeDupsAndRetweets(resultEn, locationEn)
-                    rowEnCount = len(rowEn)
+                    #rowEn = textCleanUp.removeDupsAndRetweets(resultEn, locationEn)
+                    print (word)
+                    for r in rowSc:
+                        print(r[2])
+                    #rowEnCount = len(rowEn)
                     rowScCount = len(rowSc)
-                    countAllUniques = rowEnCount + rowScCount
-                    print ("There are a total of "+str(countAllUniques)+ " unique tweets, "+str(rowEnCount)+" from England and "+str(rowScCount)+" from Scotland.")
+                    countAllUniques =  rowScCount
+                    print ("There are a total of "+str(countAllUniques)+ " unique tweets, "+str(rowScCount)+" from Scotland.")
                     print("/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*/*\*")
                     print (" ")
             
                     visList=[("location","author","text")]
                     sortingTweets(rowSc, visList, locationSc,word)
-                    sortingTweets(rowEn, visList, locationEn,word)
+                    #sortingTweets(rowEn, visList, locationEn,word)
                     fileFunctions.writeCsvFile(visList, fileString)
 
-                    wordTuple = (word, countAllUniques, rowEnCount, rowScCount)
+                    wordTuple = (word, countAllUniques, rowScCount)
                 #if there were no tweets retrieved, only add the count to the total count list   
                 else:
-                    wordTuple = (word, count, countEn, countSc)
+                    wordTuple = (word, count, countSc)
 
                 listOfKeywords.append(wordTuple)
                 print("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+")    

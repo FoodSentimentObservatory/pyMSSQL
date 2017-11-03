@@ -97,7 +97,7 @@ def removeDupsAndRetweets(row, location):
         if i%10000==0:
             print("processed "+ str(i) +  " tweets")
 
-    print ("All tweets from "+location+" have been processed.")
+    #print ("All tweets from "+location+" have been processed.")
 
     return rowS
 #needs to be fixed in order to filter out properly tweets with shorter strings
