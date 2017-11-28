@@ -3,6 +3,7 @@ import csv
 from configparser import SafeConfigParser
 import config
 import re
+import json
 
 parser = SafeConfigParser()
 parser.read('config.txt')
@@ -22,18 +23,16 @@ def readKeywordFile():
 
     return filterKeywords
 
-def writeCsvFile(tupleList, fileNameString):
-    removedSpaces = fileNameString.replace(" ","_")
-    path = config.resultPaths()
-    with open('%s/%s.csv'%(path,removedSpaces),'w',newline='', encoding = 'utf-8') as f:
-        writer = csv.writer(f, delimiter=',')
-        writer.writerows(tupleList)
+def generateJson(listOfDataForVis):
+    
+    dicList = []
+    for row in listOfDataForVis:
+            dic = {}
+            dic['group']=row[0]
+            dic['username']=row[1]
+            dic['tweet']=row[2]
+            dicList.append(dic)
 
-    print ("A spreadsheet "+fileNameString+" has been generated.")
+    jsonFormat =  json.dumps(dicList,ensure_ascii=False).encode('utf8')
 
-def writeTxtFrequencyFile(listOfWords, fileNameString,counter):
-    path = config.resultPaths()
-    file = open("%s/%s_%s.txt"%(path,counter,fileNameString), "w", encoding = 'utf-8')
-    for word in listOfWords:
-        file.write("%s\n" %word)
-    file.close()
+    return (jsonFormat)  

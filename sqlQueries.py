@@ -1,23 +1,13 @@
 import config
 import pymssql
 #connecting to database
-def connectionToDatabase():
-    server = config.dbServer()
-    databased = config.databaseName()
-    portd = config.databasePort()
-    #connection to the database
-    conn = pymssql.connect(server,database=databased,port=portd)
-    #cursor = conn.cursor()
-    print ("Connection to Database successfull")
-
-    return conn
 
 def connectionToDatabaseTest(dbName):
     server = config.dbServer()
     databased = dbName
     portd = config.databasePort()
     #connection to the database
-    conn = pymssql.connect(server,database=databased,port=portd)
+    conn = pymssql.connect(server,database=databased,port=portd,autocommit=True)
     #cursor = conn.cursor()
     print ("Connection to Database " +dbName+" was successfull")
 
@@ -26,48 +16,7 @@ def connectionToDatabaseTest(dbName):
 def closeDbConnection():
     conn = connectionToDatabase.conn
     conn.close()    
-#collecting all tweets from all locations for a given search description
-def retrieveAllTweets(cursor, searchDescription):
-    cursor.execute("SELECT [Post].[Id],[Post].[hasCreator],\
-    [Post].[body], [Post].[createdAt],\
-    [Post].[platformPostID], [UserAccount].[platformAccountId], \
-    [Search].[Note],[Post].[SearchId]\
-    FROM [Post]\
-    INNER join [UserAccount] ON [UserAccount].[Id]= [Post].[hasCreator]\
-    INNER join [Search] ON [Post].[SearchId]=[Search].Id\
-    WHERE [Search].[Note] LIKE '%"+ searchDescription +"%' ORDER BY [Post].[createdAt] ASC")
 
-    row = cursor.fetchall()
-
-    return row
-#collecting all tweets containing a keyword from a given search
-def retrieveTweetsByKeyword(cursor, keyword, searchDescription):
-    cursor.execute("SELECT [Post].[Id],[Post].[hasCreator],\
-    [Post].[body], [Post].[createdAt],\
-    [Post].[platformPostID], [UserAccount].[platformAccountId], \
-    [Search].[Note],[Post].[SearchId]\
-    FROM [Post]\
-    INNER join [UserAccount] on [UserAccount].[Id]= [Post].[hasCreator]\
-    INNER join [Search] ON [Post].[SearchId]=[Search].Id\
-    WHERE [Post].[body] LIKE '%"+ keyword +"%' AND  [Search].[Note] LIKE '%"+ searchDescription +"%'\
-    ORDER BY [Post].[createdAt] ASC ")
-
-    result = cursor.fetchall()
-    return result
-#collecting all tweets from a given search from a given location
-def locationQuery(cursor,searchDescription, location):
-     cursor.execute("SELECT [Post].[Id],[Post].[hasCreator],\
-     [Post].[body], [Post].[createdAt],\
-     [Post].[platformPostID], [UserAccount].[platformAccountId],\
-     [Post].[SearchId] \
-     FROM [Post] \
-     INNER join [Search] ON [Post].[SearchId]=[Search].Id \
-     INNER join [UserAccount] ON [UserAccount].[Id]= [Post].[hasCreator]\
-     WHERE [Search].[Note] LIKE '%"+ searchDescription +"%' AND [Search].[Note] LIKE '%"+ location +"%'\
-     ORDER BY [Post].[createdAt] ASC")
-     row = cursor.fetchall()
-
-     return row
 #collecting all tweets from a given search from a given location containing a given keyword
 def locationQueryKeyword(cursor, keyword,searchDescription, location, fromDate, toDate):
      cursor.execute("SELECT [Post].[Id],[Post].[hasCreator],\
@@ -127,3 +76,98 @@ def getLocationOfSearch(cursor, queryString, location):
     coordinates = cursor.fetchall()
 
     return coordinates
+
+def getFirstSearchDate(cursor,queryString,location):    
+    cursor.execute("SELECT TOP 1 [Search].[startOfSearch] FROM [Search] WHERE [Search].[Note] LIKE '%"+queryString+"%' AND [Search].[Note] LIKE '%"+location+"%' ORDER BY [Search].[startOfSearch] ASC")
+
+    firstSearch = cursor.fetchall()
+
+    return firstSearch
+
+def getLastSearchDate(cursor,queryString,location):
+    cursor.execute("SELECT TOP 1 [Search].[endOfSearch] FROM [Search] WHERE [Search].[Note] LIKE '%"+queryString+"%' AND [Search].[Note] LIKE '%"+location+"%' ORDER BY [Search].[endOfSearch] DESC")
+
+    lastSearchDate = cursor.fetchall()
+
+    return lastSearchDate    
+
+def getCountOfSearches(cursor, queryString, location):
+    cursor.execute("SELECT  COUNT(*) FROM\
+        (SELECT  DISTINCT StartOfSearch, Note\
+        FROM [Search]\
+        WHERE [Search].[Note] LIKE '%"+queryString+"%' AND [Search].[Note] LIKE '%"+location+"%') a") 
+
+    countOfSearches = cursor.fetchall()
+
+    return countOfSearches   
+
+def getExistingCollections(cursor):
+    cursor.execute("SELECT * FROM [Collections]")   
+
+    listOfCollections = cursor.fetchall()
+
+    return listOfCollections 
+
+def searchForUniqueId(cursor,collectionId):
+    cursor.execute("SELECT * FROM [Collections] WHERE [Collections].[uniqueIdentifier] ='"+collectionId+"'")   
+
+    collection = cursor.fetchall()
+
+    return collection 
+
+def updateCollectionEntry(cursor, collectionIds, collectionNames, collectionDescriptions,dateOfCreation):
+    cursor.execute("UPDATE [Collections] SET [Description] = '%s', [collectionName] = '%s', [lastUpdated] = '%s' WHERE [uniqueIdentifier] = '%s'"%(collectionDescriptions,collectionNames,dateOfCreation,collectionIds))
+    print("entry updated")    
+
+
+def createANewCollectionEntry(cursor, collectionIds, collectionNames, collectionDescriptions,dateOfCreation):
+    sql = "INSERT INTO [Collections] ([Description],[uniqueIdentifier],[collectionName],[dateCreated]) VALUES (%s,%s,%s,%s)" 
+    cursor.execute(sql,(collectionDescriptions,collectionIds,collectionNames,dateOfCreation))
+    print("entry created")    
+
+def deleteCollectionEntry(cursor, collectionId):
+    cursor.execute("DELETE FROM [Collections] WHERE [uniqueIdentifier] = '"+collectionId+"'")   
+    print ("entry deleted") 
+
+def deleteAllParametersOfACollection(cursor, collectionId):
+        cursor.execute("DELETE FROM [ParametersForCollections] WHERE [collectionId] = '"+collectionId+"'")
+        print("parameters have been deleted.")
+
+def deleteASpecificParameter(cursor, uniqueIdentifier, keywordGroup):
+    cursor.execute("DELETE FROM [ParametersForCollections] WHERE [collectionId]='"+uniqueIdentifier+"' AND [keywords] ='"+keywordGroup+"'")        
+
+def getCollectionName (cursor, uniqueId):
+    cursor.execute("SELECT [CollectionName] FROM [Collections] WHERE [uniqueIdentifier] = '"+uniqueId+"'")  
+
+    collectionName = cursor.fetchall()
+    collectionNameStr = collectionName[0][0]
+
+    return collectionNameStr  
+
+def saveQueryParameters(cursor, collectionId, keywords, searchQuery, location, fromDate, toDate):
+    sql = "INSERT INTO [ParametersForCollections] ([keywords], [searchQuery], [location], [fromDate], [toDate], [collectionId]) VALUES (%s,%s,%s,%s,%s,%s)"
+    cursor.execute(sql,(keywords,searchQuery,location,fromDate,toDate,collectionId))
+    print("new keyword group created.")
+
+def getParametersOfCollection(cursor, collectionId):
+    cursor.execute("SELECT * FROM [ParametersForCollections] WHERE [collectionId] = '"+collectionId+"'")
+
+    collectionParametersList = cursor.fetchall()
+
+    return collectionParametersList    
+
+def getAllCollectionParameters(cursor):
+    cursor.execute("SELECT [keywords],[collectionId] FROM [ParametersForCollections]")  
+
+    listOfAllParamaters = cursor.fetchall()
+
+    return listOfAllParamaters  
+
+def getCollectionId (cursor, collectionUniqueId):
+    cursor.execute("SELECT TOP 1 [Id], [uniqueIdentifier] FROM [Collections] WHERE [Collections].[uniqueIdentifier] = '"+collectionUniqueId+"'")
+
+    collection = cursor.fetchall()
+    collectionId= collection[0][0]
+
+    return collectionId    
+

@@ -30,12 +30,10 @@ scotland = 0
 both = 1
 
 [db-data]
-db = 
-dbSprintTwo = 
 port = 
 server = 
 
-[sprints]
-sprintOne = 1
-sprintTwo = 0
-sprintThree = 0
+[db-names]
+sprintOne = 
+sprintTwo = 
+sprintThree = 

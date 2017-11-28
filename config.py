@@ -76,9 +76,6 @@ def keywordFileSelection():
 
         return path
 #collecting database specifications 
-def databaseName():
-    database = parser.get('db-data', 'db')
-    return database
 
 def databasePort():
     dbPort = parser.get('db-data', 'port')
@@ -88,10 +85,6 @@ def dbServer():
     server = parser.get('db-data', 'server')
     return server
 
-def getDbSprintOne():
-    database = parser.get('db-data', 'db')
-    return database
-    
-def getDbSprintTwo():
-    database = parser.get('db-data', 'dbSprintTwo')
-    return database
+def getAllDatabases():
+    databaseList = parser.items('db-names')
+    return databaseList

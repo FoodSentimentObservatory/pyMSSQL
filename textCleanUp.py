@@ -17,7 +17,6 @@ def textCleanup(allWords,text):
     for word in text:
                 words =re.sub(r'@', "", str(word))
                 if word.is_stop != True and word.like_url != True and word.is_punct !=True and word.like_num != True and words.isalpha()== True and len(words)> 1:
-                    #someList.append(words)
                     allWords.append(words.lower())
 #does a frequency count of words across the whole corpus given to it using spacy and also generates a list of repeated words and unique words
 def frequencyCount(tweets, group):
@@ -36,13 +35,10 @@ def frequencyCount(tweets, group):
     for word_id, count in sorted(counts.items(), reverse=True, key=lambda item: item[1]):
         words = nlp.vocab.strings[word_id]
 
-        #if words.isalpha() == True:
         frequencyTuple = (str(count), words.lower())
         frequencyTupleStr = ' '.join(frequencyTuple)
-        #allWordsFrequency.append(frequencyTupleStr)
         if count > 1:
                     repeatedWordsTuple = (str(count), words.lower())
-                    #repeatedWordsTupleStr = ' '.join(repeatedWordsTuple)
                     repeatedWords.append(repeatedWordsTuple)
 
         else:
@@ -57,34 +53,7 @@ def frequencyCount(tweets, group):
             topTen.append(tup)
             n+=1               
     return topTen                
-    #generate a txt file with all words that have been repeated at least twice
-    #fileNameStringAllFreq = "allFrequencies"
-    #fileFunctions.writeTxtFrequencyFile(allWordsFrequency,fileNameStringAllFreq, counter)
-    #print ("File with the frequencies of all words has been generated. ")
 
-    #fileNameStringRep = "repeatedWords"
-    #fileFunctions.writeTxtFrequencyFile(repeatedWords,fileNameStringRep,counter)
-
-    #print ("File with the frequencies of all repeated words has been generated. ")
-
-#removes any word from a tweet which doesn't appear at least twice across the whole tweet corpus
-def removeUniqueWords(uniqueWords, allTweets, finalTweetTexts, finalTextCount):
-        for tweet in allTweets:
-            tweetText = []
-            text = tweet[2]
-            for word in text:
-                words = str(word)
-                if words not in uniqueWords:
-                    tweetText.append(words)
-            #generating a list with the processed text and word count of each tweet for the csv file
-            tweetTextS = str(tweetText)
-            tweetTextCount = len(tweetText)
-            tweetTextTuple = (tweet[0], tweetTextS, tweetTextCount)
-            finalTextCount.append(tweetTextTuple)
-            #generating a list with the tweet data+filtered text
-            tweetList = [tweet[0], tweet[1], tweetText, tweet[3]]
-            finalTweetTexts.append(tweetList)
-        print ("The unique words have been removed from all the tweets. ")
 #removes duplicating tweets (based on platfrom ID) and retweets*
 #* if we don't have the original tweet text, one retweet can get through the filtering..
 # ..the retweet is stripped from the 'rt' and any mentions and the remaining string is compared to a list of originals
@@ -123,48 +92,7 @@ def removeDupsAndRetweets(row, location):
     print ("All tweets from "+location+" have been processed.")
 
     return rowS
-#needs to be fixed in order to filter out properly tweets with shorter strings
-def searchForKeywordCombos(filterKeywords, text, filterWords,nlp):
-    filterCount = 0
-    check = 0
-    for word in filterKeywords:
-        if str(word)!='fhis' and str(word)!='fhrs' and str(word)!='fsa' and str(word)!='fss':
-            wordS=word
-            if word in text:
-                if word not in filterWords:
-                    filterCount += 1
-                    filterWords.append(word)
-                if filterCount >=1:
-                    check = 1
-                else:check = 2
-        else:
-            wordS = "o"+word+"t"
-            if word in text:
-                textList=text.split()
-                for t in textList:
-                    if t==word and t.isalpha()==True and wordS not in str(t):
-                        if word not in filterWords:
-                            filterCount += 1
-                            filterWords.append(word)
-                        if filterCount >=1:
-                            check = 1
-                        else:check = 2
-    return check
 
-def wordCountGen(wordCount, finalTextCount, counter):
-    fileNameString = counter+"_wordCount"
-    wordCountFinal = []
-    for count in wordCount:
-        tweetID = count[0]
-        oldCount = count[2]
-        origText = str(count[1]).encode(sys.stdout.encoding, errors='replace')
-        for cleanCount in finalTextCount:
-            if cleanCount[0] == tweetID:
-                newText = str(cleanCount[1]).encode(sys.stdout.encoding, errors='replace')
-                finalCountTuple = (tweetID, origText, oldCount, newText, cleanCount[2])
-                wordCountFinal.append(finalCountTuple)
-
-    fileFunctions.writeCsvFile(wordCountFinal, fileNameString)
 
 def clickableLinks(item):
     r = re.compile(r"(https://[^ ]+)")
@@ -198,3 +126,19 @@ def dictionaryGen(tweetGroups,i):
         dicw[key] = list(group) 
 
     return dicw    
+
+def makeAStringOfKeywordGroups(parametersDictionary):
+        paramsList = []
+        for key, value in parametersDictionary.items():
+            paramsString = ""
+            i = 0
+            for group in value:
+                if i == 0:
+                    paramsString = group[0]
+                else: 
+                    paramsString = paramsString + ";" + group[0]
+                i+=1
+            paramsSublist = [key,paramsString]
+            paramsList.append(paramsSublist)
+
+        return paramsList    

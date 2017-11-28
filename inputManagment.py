@@ -8,60 +8,14 @@ import json
 parser = SafeConfigParser()
 parser.read('config.txt')
 
-def locationDef():
-    locationQuery = input("Please type Scotland for tweets from Scotland, England for tweets from England or press enter if you want all tweets: ")
-
-    if locationQuery.lower() =="scotland":
-        location = "Scotland"
-    elif locationQuery.lower() =="england":
-        location = "England"
-    else:
-        location = "-"
-
-    config.setLocation(location)
-
-    return location
-
-def fetchingTweets(cursor, location, searchQuery, keywords):
-    keywordsList=keywords
-    row=[]
-    if len(keywords) !=0:
-
-        counter = '_'.join(keywordsList)
-        rowL = []
-
-        stopCount = 0
-        for keyword in keywordsList:
-            if len(location)!=0:
-                result = sqlQueries.locationQueryKeyword(cursor, keyword,searchQuery, location)
-                rowL.append(result)
-            else:
-                result = sqlQueries.retrieveTweetsByKeyword(cursor, keyword, searchQuery)
-                rowL.append(result)
-        for sublist in rowL:
-            for tweet in sublist:
-                row.append(tweet)
-    #if no keywords have been specified, fetch all tweets from the database
-    else:
-        stopCount = 0
-        if len(location)!=0:
-            row = sqlQueries.locationQuery(cursor,searchQuery,location)
-        else:
-            row = sqlQueries.retrieveAllTweets(cursor,searchQuery)
-
-    return row
-
 def fetchingTweetsContainingGroups(cursor,location,searchQuery,listOfGroups, fromDate, toDate):
     row=[]
     print(len(listOfGroups))
-    if len(listOfGroups)>1:
-        for group in listOfGroups:
-            groupRow= groupSearch(cursor, location,searchQuery, group,  fromDate, toDate)        
-            row.append(groupRow)
-    else:
-        for group in listOfGroups:
-            groupRow= groupSearch(cursor, location,searchQuery, group,  fromDate, toDate)
-            row.append(groupRow)         
+  
+    for group in listOfGroups:
+        groupRow= groupSearch(cursor, location,searchQuery, group,  fromDate, toDate)        
+        row.append(groupRow)
+           
     print("Found a total of "+str(len(row))+" tweets.")    
     return row                        
 #function to search for tweets containing a group of keywords
@@ -70,8 +24,11 @@ def groupSearch(cursor, location,searchQuery, group, fromDate, toDate):
     print (group)
     rowL=[]
     groupRow=[]
+    strGroupOfTweets = ''.join(group)
+    noCommaGroupOfTweets = strGroupOfTweets.replace(',','')
     #for eah word, fetch all tweets containing the word
     for word in group:
+        word = word.replace("+", " ")
         print (word)
         result = sqlQueries.locationQueryKeyword(cursor, word,searchQuery, location, fromDate, toDate)
         print(len(result))
@@ -88,6 +45,7 @@ def groupSearch(cursor, location,searchQuery, group, fromDate, toDate):
                 
                 textOr=tweet[2].replace("\n"," ")
                 text=html.escape(textOr,quote=True)
+                
                 displayName = html.escape(tweet[9],quote=True)
                 tweetID = tweet[4]
                 count=0       
@@ -110,25 +68,43 @@ def groupSearch(cursor, location,searchQuery, group, fromDate, toDate):
                         verified="False"
                     elif tweet[8]==True:
                         verified="True"    
-                    filteredTextTweet=[text,date,tweet[5],verified,displayName] 
+                    filteredTextTweet=[text,date,tweet[5],verified,displayName,noCommaGroupOfTweets,strGroupOfTweets] 
                     listOfTweetIDs.append(tweetID) 
                     groupRow.append(filteredTextTweet)
     print ("Found "+str(len(groupRow))+" tweets containing all words from the group")   
     print ("-------------------------------------S")
 
     return groupRow
+#gets all db names from the config file and creates a list of dbs
+#containing db name, string for an html id tag and a string of all other db names
+#which is to be used by the javascript in order to set visibility of divs
+def getDBs():
+    listOfDBs=[]
+    listOfDbNames=config.getAllDatabases()
+
+    for db in listOfDbNames:
+        notDbString = ""
+        for notDb in listOfDbNames:
+            if notDb[1] != db[1]:
+                if len(notDbString) == 0:
+                    notDbString = notDb[1]
+                else:
+                    notDbString = notDbString + ";" + notDb[1]    
+        idStr = "radio_"+db[1]
+        dbTuple = (db[1], idStr, notDbString)    
+        listOfDBs.append(dbTuple)
+
+    return listOfDBs    
 #main function to get data for each sprint's notes
+#loops through each database specified in the config file
 def getSearchNotes():
-    dbSprintOne = config.getDbSprintOne()
-    dbSprintTwo = config.getDbSprintTwo()
-
-    sprintOne = "Sprint-1"
-    sprintTwo = "Sprint-2"
-    #getting the sprint notes for each sprint
-    sprintOneNotes = getSprintNotes(dbSprintOne,sprintOne)
-    sprintTwoNotes = getSprintNotes(dbSprintTwo,sprintTwo)
-
-    sprintNotesList = [sprintOneNotes,sprintTwoNotes]
+    sprintNotesList = []
+    listOfDbNames=config.getAllDatabases()
+    for db in listOfDbNames:
+        print(db[1])
+        sprintName = db[1]
+        sprintNotes = getSprintNotes(db[1],sprintName)
+        sprintNotesList.append(sprintNotes)
 
     noteList = [item for sprint in sprintNotesList for item in sprint]
     n=5
@@ -136,11 +112,12 @@ def getSearchNotes():
     #giving an id that would be used for the creation of radio buttons in the interface
     for note in noteList:
         idstr= "radio"+str(n)
-        newNoteTup = (note[0],note[1],note[2],idstr, note[3],note[4],note[5],note[6], note[7], note[8])
+        keywordListId ="keywordList"+str(n)
+        newNoteTup = (note[0],note[1],note[2],idstr, note[3],note[4],note[5],note[6], note[7], note[8],note[9],note[10],note[11],keywordListId)
         newNoteList.append(newNoteTup)
         n+=1
     #creating a dictionary, key is the sprint    
-    i = 1
+    i = 4
     dicNotes = textCleanUp.dictionaryGen(newNoteList,i)
 
     return dicNotes
@@ -148,6 +125,7 @@ def getSearchNotes():
 def getSprintNotes(sprintDb, sprint):
     conn = sqlQueries.connectionToDatabaseTest(sprintDb)
     cursor = conn.cursor()
+
     #query to get all unique notes
     sprintNotes = sqlQueries.sprintNotesQuery(cursor, sprintDb)   
     newSprintNoteList=[]
@@ -168,29 +146,39 @@ def getSprintNotes(sprintDb, sprint):
             newNoteM = str(note[0]).split("-")[-1] 
             locationS = str(note[0]).split("-")[0]
             location = locationS.split(" ")[0]
-            newNote = location + " -"+newNoteM
-
-        
-           
+            newNote = location + " -"+newNoteM        
         #because of the random numbers mentioned above, after we clean the note string
         #we need to check if we've already encoutered it before, if not, continue with the rest    
         if newNote not in alreadySeenNotes:
             coordinates = getCoordinates(cursor, newNoteM, location)
-            print(coordinates) 
             #getting the earliest and the most recent tweet from db and removing the milliseconds
             earliestSearchDate = sqlQueries.getEarliestDate(cursor,newNoteM,location)
             mostRecentDate = sqlQueries.getMostRecentDate(cursor,newNoteM,location)
 
             dateEarliest = earliestSearchDate.rpartition('.')[0]
             dateRecent = mostRecentDate.rpartition('.')[0]
+            firstSearchDate = sqlQueries.getFirstSearchDate(cursor,newNoteM,location)
+            lastSearchDate = sqlQueries.getLastSearchDate(cursor,newNoteM,location)
+
+            countOfSearches = sqlQueries.getCountOfSearches(cursor, newNoteM, location)
+            countOfSearchesInt = countOfSearches[0][0]
+
+            firstSearchDateModified = firstSearchDate[0][0].rpartition('.')[0]
+            lastSearchDateModified = lastSearchDate[0][0].rpartition('.')[0]
             #using a function to pull the search keyword strings for each sprint
             keywords = getSprintQueryKeywords(cursor,newNoteM,location)
             count = sqlQueries.getCount(cursor, newNoteM,location)
             countInt = count[0][0]
             countWithCommas = '{0:,}'.format(countInt)
-            print(count)
+            print(newNote)
+            print(sprintDb)
+            print(keywords)
+            print(countWithCommas)
+            print(coordinates)
+            print(countOfSearchesInt)
+            print("--------------------------")
             #for each note we create a tuple containing data to display
-            noteTup = (newNote, sprint, location,sprintDb,dateEarliest,dateRecent,keywords,countWithCommas,coordinates)
+            noteTup = (newNote, sprint, location,sprintDb,dateEarliest,dateRecent,keywords,countWithCommas,coordinates,firstSearchDateModified,lastSearchDateModified,countOfSearchesInt)
             newSprintNoteList.append(noteTup)
             alreadySeenNotes.append(newNote)
       
@@ -211,7 +199,8 @@ def getSprintQueryKeywords(cursor,note,location):
             for w in wordList:
                 w = textCleanUp.extraCharRemoval(w, charList,check)
                 wNew = w.replace("'",' ')
-                queryList.append(wNew)
+                if wNew not in queryList:
+                    queryList.append(wNew)
     #sorting list aplhabetically, ignoring whether word starts with capital or small letter            
     sortedEditedQuery = sorted(queryList, key=str.lower)
     queryString = '; '.join(sortedEditedQuery)
@@ -222,3 +211,26 @@ def getCoordinates(cursor, newNoteM, location):
         coordinates = sqlQueries.getLocationOfSearch(cursor, newNoteM, location)
 
         return coordinates
+
+def getCollectionsFromAllDbs():
+    listOfCollectionsWithDb = []
+    listOfDbNames=config.getAllDatabases()
+    for db in listOfDbNames:
+        getListOfCollection(db[1],listOfCollectionsWithDb)
+    i=6
+    dicCollections = textCleanUp.dictionaryGen(listOfCollectionsWithDb,i)
+
+    return dicCollections
+
+def getListOfCollection(database, listOfCollectionsWithDb):
+    conn = sqlQueries.connectionToDatabaseTest(database)
+    cursor = conn.cursor()
+
+    collectionsData = sqlQueries.getExistingCollections(cursor)
+    for collection in collectionsData:
+        databaseCollectionName = database+"_collection"
+        newCollectionDataList = [collection[0], collection[1], collection[2], collection[3], collection[4], collection[5], databaseCollectionName]
+        listOfCollectionsWithDb.append(newCollectionDataList)
+
+
+    conn.close()

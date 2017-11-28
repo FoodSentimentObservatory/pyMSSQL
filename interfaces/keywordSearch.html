@@ -12,7 +12,7 @@
 
 	</head>
 
-	<body onload="getKeywords();">
+	<body onload="getKeywords(); getDBName();">
 	<div class="se-pre-con"></div>
 	    <nav class="navbar navbar-inverse">
       <div class="container">
@@ -22,14 +22,16 @@
         <ul class="nav navbar-nav">
           <li><a href="/index">Home</a></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Search Types
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Searches
             <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="#">All keywords</a></li>
-              <li><a href="#">Select specific keywords</a></li>
+              <li><a href="#">List of</a></li>
+              <li><a href="#">Searches</a></li>
+              <li><a href="#">For that sprint</a></li>
             </ul>
           </li>
           <li><a href="#">Manual</a></li>
+          <li><a href="/collectionsPage">Collections</a></li>
         </ul>
       </div>
     </nav> 
@@ -43,6 +45,7 @@
 			<div class="row">
 		        <div class="control-group col-sm-12" id="field">
 		            <form role="form" name = "keywordGroupForm" autocomplete="off" action = "/keywordSearch" onsubmit="return checkForGroups()">
+		            	<input type="hidden" name="dbName" id="dbName" value="">
 			            <input type="hidden" name = "checkName" id="check" value="no groups">
 			            <div class="headers col-sm-12">
 			            	<div id="eitherOrHeader" class="col-sm-6"> <h3>At least one of these groups of keywords to be present in each tweet</h3> </div>
@@ -74,8 +77,7 @@
 			            	<button type='submit' class='btn btn-default' id="floatyButton">Search</button>
 			            </div>	                    
 		            </form>
-		            
-		            
+ 
 		        </div>
 			</div>    
 		</div>
@@ -116,7 +118,11 @@
 			</div>
 			</div>
 		</div>
-		
+			<footer class="footer" id="footerId">
+      <div class="container"> 
+        
+      </div>
+    </footer>
 		
 		<script src='/static/js/bootstrap.min.js'></script>
 		<script src='http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js'></script>
