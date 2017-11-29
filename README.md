@@ -37,6 +37,11 @@ Jinja2-2.9.6-py2.py3-none-any.whl . In command line navigate to the folder that 
 pip install Jinja2-2.9.6-py2.py3-none-any.whl
 ```
 
+* [ScatterText](https://github.com/JasonKessler/scattertext)
+```
+pip install scattertext
+```
+
 ### Other required setup
 
 This project works with **Microsoft SQL Server Management Studio** as database environment.
