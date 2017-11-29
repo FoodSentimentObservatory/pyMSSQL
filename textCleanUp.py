@@ -68,7 +68,6 @@ def removeDupsAndRetweets(row, location):
         i = i+1
         if r[4] not in twitterIDs:
             twitterIDs.append(r[4])
-            #rowS.append(r)
             text = r[2].lower()
             textList = text.split()
             textStrList = [word for word in textList if word.isalpha()]
@@ -92,14 +91,13 @@ def removeDupsAndRetweets(row, location):
     print ("All tweets from "+location+" have been processed.")
 
     return rowS
-
-
+#make any links in the tweet bodies clickable
 def clickableLinks(item):
     r = re.compile(r"(https://[^ ]+)")
     text= r.sub(r'<a href="\1">\1</a>', item)   
 
     return text 
-
+#function to remove any extra characters from a string
 def extraCharRemoval(item, charList,check):
     for ch in charList:
         if ch in item:
@@ -117,7 +115,7 @@ def addTweetToNewGroupsList(word,tweet,groupIdStr,newGroups):
     groupId=groupIdStr+word
     tweetWithWord = [tweet[0], tweet[1], tweet[2], tweet[3], tweet[4],word,groupId]
     newGroups.append(tweetWithWord)    
-
+#generate a dictionary given a list and an index number
 def dictionaryGen(tweetGroups,i):
     dicw={}
     f = lambda x: x[i]
@@ -126,7 +124,9 @@ def dictionaryGen(tweetGroups,i):
         dicw[key] = list(group) 
 
     return dicw    
-
+#take a dictionary of collections and their keywords and for...
+# each collection concatenate all the keyword groups into one string
+# used for javaScript
 def makeAStringOfKeywordGroups(parametersDictionary):
         paramsList = []
         for key, value in parametersDictionary.items():

@@ -1,34 +1,3 @@
-[file-paths]
-generaldiscourse = path/to/data/generalDiscourseKeywords.txt
-fhisdiscourse = path/to/data/fhisKeywords.txt
-fhrsdiscourse = path/to/data/fhrsKeywords.txt
-
-[search-terms]
-genfoodhygiene = general food hygiene discourse
-fhisdiscourseboth = fhis discourse
-fhrsdiscourseboth = fhrs discourse
-
-[search-definitions]
-general = 0
-fhis = 0
-fhrs = 1
-textFiles = 0
-
-[result-paths]
-genboth = path/to/statistics/both
-fhisboth = path/to/statistics/fhis/both
-fhrsboth = path/to/statistics/fhrs/both
-tweetsscotland = path/to/tweets-2/scotland
-tweetsengland = path/to/tweets-2/england
-alltweets = path/to/tweets-2/all
-rawTweets = path/to/raw-tweets
-textFiles = path/to/texts
-
-[search-location]
-england = 0
-scotland = 0
-both = 1
-
 [db-data]
 port = 
 server = 

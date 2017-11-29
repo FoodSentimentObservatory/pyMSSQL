@@ -1,12 +1,9 @@
-from configparser import SafeConfigParser
 import sqlQueries
 import config
 import html
 import re
 import textCleanUp
 import json
-parser = SafeConfigParser()
-parser.read('config.txt')
 
 def fetchingTweetsContainingGroups(cursor,location,searchQuery,listOfGroups, fromDate, toDate):
     row=[]
@@ -41,8 +38,7 @@ def groupSearch(cursor, location,searchQuery, group, fromDate, toDate):
     treshhold = len(group)
     print (treshhold)
     listOfTweetIDs = []
-    for tweet in rowL:  
-                
+    for tweet in rowL:                 
                 textOr=tweet[2].replace("\n"," ")
                 text=html.escape(textOr,quote=True)
                 
@@ -206,12 +202,12 @@ def getSprintQueryKeywords(cursor,note,location):
     queryString = '; '.join(sortedEditedQuery)
 
     return queryString
-
+#function that retrieves the coordinates for a given search
 def getCoordinates(cursor, newNoteM, location):
         coordinates = sqlQueries.getLocationOfSearch(cursor, newNoteM, location)
 
         return coordinates
-
+#function to retrieve all collections from all databases
 def getCollectionsFromAllDbs():
     listOfCollectionsWithDb = []
     listOfDbNames=config.getAllDatabases()
@@ -221,7 +217,7 @@ def getCollectionsFromAllDbs():
     dicCollections = textCleanUp.dictionaryGen(listOfCollectionsWithDb,i)
 
     return dicCollections
-
+#gets the collections for a given database
 def getListOfCollection(database, listOfCollectionsWithDb):
     conn = sqlQueries.connectionToDatabaseTest(database)
     cursor = conn.cursor()
